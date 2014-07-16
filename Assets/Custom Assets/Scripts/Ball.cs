@@ -21,6 +21,7 @@ public class Ball : MonoBehaviour {
 	public float height;
 	public float maxSpeed;
 	public float minSpeed;
+	public float minXSpeed;
 	public float initialDropDelay;
 	public eBall ball;
 	
@@ -65,12 +66,20 @@ public class Ball : MonoBehaviour {
 
 			if (currentDropDelay == -2000) {
 				if (rigidbody.position.y < height) {
-					rigidbody.MovePosition (new Vector3 (rigidbody.position.x, height, rigidbody.position.z));
+					rigidbody.MovePosition(new Vector3 (rigidbody.position.x, height, rigidbody.position.z));
 					rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
 					collider.isTrigger = false;
-					score.GetComponent<Scores> ().increaseMultiplier ();
-					rigidbody.AddForce (initialImpulse * score.GetComponent<Scores> ().getMultiplier (), ForceMode.Impulse);
+					score.GetComponent<Scores>().increaseMultiplier();
+					rigidbody.AddForce (initialImpulse * score.GetComponent<Scores>().getMultiplier(), ForceMode.Impulse);
 				} else if (rigidbody.position.y == height) {
+					if (Mathf.Abs(rigidbody.velocity.x) < minXSpeed) {
+						if (rigidbody.velocity.x != 0) {
+							rigidbody.AddForce (new Vector3(rigidbody.velocity.x * (minXSpeed / rigidbody.velocity.x - 1), 0f, 0f), ForceMode.Impulse);
+						} else {
+							rigidbody.AddForce (new Vector3(minXSpeed, 0f, 0f), ForceMode.Impulse);
+						}
+					}
+
 					if (rigidbody.velocity.magnitude < minSpeed) {
 						if (rigidbody.velocity.magnitude != 0) {
 							rigidbody.AddForce (rigidbody.velocity * (minSpeed / rigidbody.velocity.magnitude - 1), ForceMode.Impulse);
