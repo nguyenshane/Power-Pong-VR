@@ -15,13 +15,17 @@ using System.Runtime.InteropServices;
  * @version     1.0
  * @data		2014
  * 
+ * SBRemote is the class that handles all the functionality of connecting to the Seebright Remote and receiving data over Bluetooth Low Energy.
+ * Send's and receives data by sending code and recieving commands to native code on both the android and iOS.
  */
 
 public class SBRemote
 {
 
-	// These are the current representations of the button states on remote
-	
+	/** @name Remote Controls
+	 * The name of the commands expected to send and receive functions on the Seebright Remote.
+	 */
+	//!@{
 	public const string JOY_HORIZONTAL = "joyHorizontal";
 	public const string JOY_VERTICAL = "joyVertical";
 	public const string BUTTON_SELECT = "buttonSelect";
@@ -33,6 +37,7 @@ public class SBRemote
 	public const float MAX_JOY_HORIZONTAL = 32767.0f;
 	public const float MAX_JOY_VERTICAL = 32767.0f;
 	public string CURSOR_TRACKER_NAME = "metaioTracker";
+	//!@}
 	
 	//Operating System Suffix
 	private static string operatingSystem = "_OSX";
@@ -67,29 +72,19 @@ public class SBRemote
 	protected static bool up_button_down;
 	protected static bool up_button_trigger;
 
-
-
-	Ray ray;
-	Vector3 rayPoint;
-	Vector3 rayDest;
-	Vector3 rayDir;
-	
-	Quaternion myRot;
-
-	public static bool remoteStatus;
+	public static bool remoteStatus;				/** Receieve's the current connection status of the remote. If connected returns true. */
 	private static String remoteUUID;
 
 	private static IntPtr remoteData = IntPtr.Zero;
 	GCHandle gch;
 
-
-	public SBRemote ()
-	{
-
-	}
-
 	private static byte[] myBytes= new byte[31];
 
+
+	/** @name Remote Late Update
+	 * Called from SeebrightSDK Late Update function. Receive's updates from the BLE remote every 20ms natively. 
+	 * Bits are broken out of the byte packet and distriputed to the correct inputs.
+	 */
 	public static void remoteLateUpdate ()
 	{
 		//iPhone Remote Control Handler
@@ -135,11 +130,8 @@ public class SBRemote
 			button_up=((_buttons&1<<7)>>7)==1;
 			
 			SBCursors.cursorPeriscopePosition.x = (System.BitConverter.ToInt16(myBytes,24)) / 960.0f;
-			SBCursors.cursorPeriscopePosition.y = 1- ((System.BitConverter.ToInt16(myBytes,26)) / 540.0f);
+			SBCursors.cursorPeriscopePosition.y = 1 - ((System.BitConverter.ToInt16(myBytes,26)) / 540.0f);
 			SBCursors.cursorPeriscopePosition.z = (System.BitConverter.ToInt16(myBytes,28)) / 1000f;
-			
-			//curData = string.Format("{0} {1} {2} {3} {4} {5} {6} {7}", 
-			//                        joy_x,joy_y,button_select,button_option,button_back,button_up,button_down,button_trigger);
 			
 		} else
 			curData = "Waiting...";
@@ -161,6 +153,12 @@ public class SBRemote
 		
 	}
 
+	/** @name Get Axis
+	 * Used to check and see if the appropriate axis is moved on the Seebright remote.
+	 * @param axis The name of the axis of the remote to be returned.
+	 * @see Remote Controls
+	 * @return The float value of the name of the axis direction moved.
+	 */
 	public static float GetAxis (string axis)
 	{
 		float retVal = 0.0f;
@@ -186,7 +184,13 @@ public class SBRemote
 		}
 		return retVal;
 	}
-	
+
+	/** @name Get Button
+	 * Used to check and see if the appropriate button was pressed on the Seebright remote.
+	 * @param buttonName The name of the button to check if pressed.
+	 * @see Remote Controls
+	 * @return Returns true if the buttonName was pressed.
+	 */
 	public static bool GetButton (string buttonName)
 	{
 		
@@ -238,7 +242,13 @@ public class SBRemote
 		
 		return retVal;
 	}
-	
+
+	/** @name Get Button Up
+	 * Used to check and see if the appropriate button was pressed down on the Seebright remote.
+	 * @param buttonName The name of the button to check if pressed.
+	 * @see Remote Controls
+	 * @return Returns true if the buttonName was pressed down.
+	 */
 	public static bool GetButtonUp (string buttonName)
 	{
 		bool retVal = false;    
@@ -288,7 +298,13 @@ public class SBRemote
 		}
 		return retVal;
 	}
-	
+
+	/** @name Get Button Down
+	 * Used to check and see if the appropriate button is pressed down on the Seebright remote.
+	 * @param buttonName The name of the button to check if pressed.
+	 * @see Remote Controls
+	 * @return Returns true if the buttonName is pressed down.
+	 */
 	public static bool GetButtonDown (string buttonName)
 	{
 		bool retVal = false;    
@@ -339,7 +355,13 @@ public class SBRemote
 		
 		return retVal;
 	}
-	
+
+	/** @name Get Joystick Delta
+	 * Used to check and see how far the joystick was moved in deltaTime.
+	 * @param axis The name of the axis of the remote to be returned.
+	 * @see Remote Controls
+	 * @return Returns a float value based upon the delta of the axis.
+	 */
 	public static float GetJoystickDelta (string axis)
 	{
 		float delta = 0;
@@ -349,7 +371,11 @@ public class SBRemote
 			delta = joy_y - prev_joy_y;
 		return delta;
 	}
-	
+
+	/** @name Get Orientation
+	 * Used to get the orientation of the remote in quaternions.
+	 * @return Returns the Quaternion of the remote orientation.
+	 */
 	public static Quaternion GetOrientation ()
 	{
 		return remoteOrientation;
@@ -417,17 +443,15 @@ public class SBRemote
 	}
 	#endif
 	
-	// Use this for initialization
+	/** @name Initialize Remote
+	 * Called from SeebrightSDK to begin the connection to the remote and to begin tracking the fiducial marker.
+	 */
 	public static void InitializeRemote ()
 	{
 		// Prevent screen from dimming
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		// Start connection to the remote
 		StartService ();
-		if(SeebrightSDK.singleton.enableBallTracking)
-		{
-			StartTracking();
-		}
 
 		//Set the Operating System Suffix
 		#if UNITY_EDITOR_OSX
@@ -436,19 +460,30 @@ public class SBRemote
 		operatingSystem = "_WIN";
 		#endif
 	}
-	
+
+	/** @name Start Service
+	 * Called from InitializeRemote, begins the remote connection process by making a call to native code which looks for peripherals advertising.
+	 * Set's up the camera for the tracking algorithm which tracks the fiducial marker.
+	 */
 	public static void StartService() {
 		#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
 		_StartService();
 		#endif
 	}
-	
+
+	/** @name Stop Service
+	 * Android Only.
+	 * Called from SeebrightSDK, stops the remote connection process.
+	 */
 	public static void StopService() {
 		#if (UNITY_ANDROID) && !UNITY_EDITOR
 		_StopService();
 		#endif
 	}
 
+	/** @name Start Tracking
+	 * Called from InitializeRemote, starts the webcam to begin tracking if enableBallTracking is true. 
+	 */
 	public static void StartTracking()
 	{
 		#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
@@ -456,6 +491,9 @@ public class SBRemote
 		#endif
 	}
 
+	/** @name Stop Tracking
+	 * Stops the webcam to end the tracking session in progress.
+	 */
 	public static void StopTracking()
 	{
 		#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
@@ -463,6 +501,10 @@ public class SBRemote
 		#endif
 	}
 
+	/** @name Launch Application
+	 * Launches a external application by a URL Scheme.
+	 * @param appID The URL required to launch an external application.
+	 */
 	public static void LaunchApplication(String appID)
 	{
 		#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
@@ -470,20 +512,20 @@ public class SBRemote
 		#endif
 	}
 	
-	
+	/** @name Update Remote Status
+	 * Checks to see if a Remote is connected to the device. Returns true if connected.
+	 */
 	public static void updateRemoteStatus ()
 	{
-		
 		#if (UNITY_ANDROID || UNITY_IPHONE) && !UNITY_EDITOR
 		remoteStatus = _remoteConnected();
 		#endif
 	}
-	
-	public static void setRemoteStatus (String newStatus)
-	{
-		remoteUUID = newStatus;
-	}
 
+	/** @name Print Remote Controls
+	 * Is used within the SeebrightSDK to receive the controls of the seebright remote and output's them in the debug screen if enabled.
+	 * @return Returns the string of commands received from the remote.
+	 */
 	public static string printRemoteControls ()
 	{
 		return 

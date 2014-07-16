@@ -88,9 +88,8 @@ public class SBCamera : MonoBehaviour {
 		InitializeSBCamera();
 	}
 
-	/*!The SetMainCamera Function is designed to look for the designated main camera, and then use it
-	 * otherwise it creates the necessary components in order to have a designated main camera depending
-	 * on whether there is a designated camera or if there is just one camera as the main camera.
+	/** 
+	 * Grabs the Camera component from the attached GameObject. If one isn't found it creates one.
 	 */
 	
 	private void SetMainCamera()
@@ -98,7 +97,7 @@ public class SBCamera : MonoBehaviour {
 		mainCamera = gameObject.GetComponent<Camera>();
 		if(mainCamera == null)
 		{
-			gameObject.AddComponent<Camera>();
+			mainCamera = gameObject.AddComponent<Camera>();
 		}
 	}
 
@@ -330,7 +329,6 @@ public class SBCamera : MonoBehaviour {
 		{
 			if(!isActive)
 			{
-				SBCursors.periscope.camera.enabled = true;
 				sbLeftCamera.camera.enabled = true;
 				sbRightCamera.camera.enabled = true;
 				SeebrightSDK.currentCamera = this;
@@ -338,7 +336,7 @@ public class SBCamera : MonoBehaviour {
 			}
 			//iPhone and Android Quaternion Adjustments for Gyro Data
 			if (isGyroscopeSupported && enableGyroCam && !SeebrightSDK.singleton.enableMetaio) {
-				#if UNITY_IPHONE || UNITY_ANDROID
+				#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR
 				gyroRotation = Input.gyro.attitude;
 				currentLookRotation = gyroRotation * rotationFix * offsetCameraRotation;
 				NormalizeHeadMovement();
@@ -354,6 +352,15 @@ public class SBCamera : MonoBehaviour {
 				}
 				#endif
 			}
+			#if UNITY_EDITOR
+			if(enableGyroCam && !SeebrightSDK.singleton.enableMetaio)
+			{
+
+				float rotationX = Input.GetAxis("Horizontal");
+				float rotationY = Input.GetAxis("Vertical");
+				sbGyroOrientCamera.transform.localEulerAngles = new Vector3(rotationY, rotationX, 0);
+			}
+			#endif
 		}
 		if(!mainCamera.enabled)
 		{

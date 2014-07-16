@@ -42,20 +42,7 @@ public class SeebrightSDK : MonoBehaviour
 	 * Cannot have both enable at the same time.
 	 */
 	//!@{
-	public bool enableBallTracking = true;
 	public bool enableMetaio = false;
-	//!@}
-	
-	/** @name 3D/2D Cursor's Options
-	 * Settings used for setting GameObjects or Textures as 3D/2D cursors.
-	 * Only works if enableBallTracking is true.
-	 */
-	//!@{
-	public bool enable3Dcursor = false; 
-	public GameObject cursor3D;
-	public bool enable2Dcursor = false;
-	public Texture2D cursor2D;
-	public bool isRightEyeDominant = true;
 	//!@}
 
 
@@ -74,7 +61,6 @@ public class SeebrightSDK : MonoBehaviour
 	 */
 	void Start() 
 	{
-		SBCursors.StartCursors();
 		SBRemote.InitializeRemote();
 	}
 
@@ -97,18 +83,6 @@ public class SeebrightSDK : MonoBehaviour
 	}
 
 	/**
-	 * Checks to see if either Ball Tracking or either the 2D/3D cursors are working.
-	 * If true, sends regular updates to CursorFixedUpdate which tracks and overlays objects over the players vision.
-	 */
-	void FixedUpdate()
-	{
-		if(enable3Dcursor || enable2Dcursor || enableBallTracking)
-		{
-			SBCursors.CursorFixedUpdate ();
-		}
-	}
-
-	/**
 	 * Calls remote updates and receieves input from the Seebright Blutooth remote.
 	 * @see SBRemote.remoteLateUpdate()
 	 */
@@ -119,9 +93,9 @@ public class SeebrightSDK : MonoBehaviour
 
 
 	private const float timeTillSleep = 3.0f;
-	private static float sleepTimer = 0.0f;
+	private float sleepTimer = 0.0f;
 	private const string GUI_LABEL = "guiLabel";
-	private static GUIStyle cursorStyle;
+	private GUIStyle cursorStyle;
 	
 	private void writeGUI (string type, int x, int y, int width, int height, string stringContent)
 	{
@@ -146,40 +120,26 @@ public class SeebrightSDK : MonoBehaviour
 	 */
 	void OnGUI ()
 	{
-		if(currentCamera.mainCamera.enabled && currentCamera != null)
+		if (cursorStyle == null) 
 		{
-			if (SeebrightSDK.cursorStyle == null) 
+			cursorStyle = new GUIStyle ();
+			cursorStyle.fontSize = 20;
+			cursorStyle.fontStyle = FontStyle.Bold;
+			cursorStyle.normal.textColor = Color.white;
+			
+		}
+		if (enableDebugOutput) {
+			if(currentCamera.enableGyroCam)
 			{
-				SeebrightSDK.cursorStyle = new GUIStyle ();
-				SeebrightSDK.cursorStyle.fontSize = 20;
-				SeebrightSDK.cursorStyle.fontStyle = FontStyle.Bold;
-				SeebrightSDK.cursorStyle.normal.textColor = Color.white;
-				
+				writeGUI (GUI_LABEL, 25, -200, 100, 100, "NormalizedCamera: \nx:" +
+				          SBCamera.normalizedLookRotation.eulerAngles.x + "\ny:" + 
+				          SBCamera.normalizedLookRotation.eulerAngles.y + "\nz:" + 
+				          SBCamera.normalizedLookRotation.eulerAngles.z);
 			}
-			if (SeebrightSDK.singleton.enableDebugOutput) {
-				if(SeebrightSDK.singleton.enable2Dcursor)
-				{
-					writeGUI (SeebrightSDK.GUI_LABEL, -150, -200, 100, 50, "Cursor2D: \nx:" + (int)SBCursors.cursorPeriscopePosition.x + "\ny:" + (int)SBCursors.cursorPeriscopePosition.y);
-				}
-				if(SeebrightSDK.singleton.enable3Dcursor)
-				{
-					writeGUI (SeebrightSDK.GUI_LABEL, Screen.width/2 - 150, -200, 100, 100, "Cursor3D: \nx:" +
-					          SBCursors.cursorEyePosition.x + "\ny:" + 
-					          SBCursors.cursorEyePosition.y + "\nz:" + 
-					          SBCursors.cursorEyePosition.z);
-				}
-				if(currentCamera.enableGyroCam)
-				{
-					writeGUI (SeebrightSDK.GUI_LABEL, 25, -200, 100, 100, "NormalizedCamera: \nx:" +
-					          SBCamera.normalizedLookRotation.eulerAngles.x + "\ny:" + 
-					          SBCamera.normalizedLookRotation.eulerAngles.y + "\nz:" + 
-					          SBCamera.normalizedLookRotation.eulerAngles.z);
-				}
-				#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR 
-				writeGUI(SeebrightSDK.GUI_LABEL,Screen.width/4-200, 160, 400, 50, "UnityEdit: " + SBRemote.printRemoteControls());
-				#endif
-				
-			}
+			#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR 
+			writeGUI(GUI_LABEL,Screen.width/4-200, 160, 400, 50, "UnityEdit: " + SBRemote.printRemoteControls());
+			#endif
+			
 		}
 		#if (UNITY_IPHONE || UNITY_ANDROID) && !UNITY_EDITOR   
 		SBRemote.updateRemoteStatus();
