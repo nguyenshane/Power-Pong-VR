@@ -15,7 +15,7 @@ public class SwitchCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.Space) || SBRemote.GetButtonDown(SBRemote.BUTTON_SELECT))
+		if(Input.GetKeyDown(KeyCode.Space))
 		{
 			if(cam1.enabled)
 			{
