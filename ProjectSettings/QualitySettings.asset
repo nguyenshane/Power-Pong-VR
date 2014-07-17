@@ -4,7 +4,7 @@
 QualitySettings:
   m_ObjectHideFlags: 0
   serializedVersion: 5
-  m_CurrentQuality: 4
+  m_CurrentQuality: 3
   m_QualitySettings:
   - serializedVersion: 2
     name: Fastest
@@ -67,7 +67,7 @@ QualitySettings:
     name: Good
     pixelLightCount: 2
     shadows: 2
-    shadowResolution: 1
+    shadowResolution: 2
     shadowProjection: 1
     shadowCascades: 2
     shadowDistance: 40
@@ -137,4 +137,4 @@ QualitySettings:
     Windows Store Apps: 3
     XBOX360: 3
     XboxOne: 3
-    iPhone: 2
+    iPhone: 4

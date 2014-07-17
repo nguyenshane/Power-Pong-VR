@@ -254,7 +254,7 @@ public class Player : MonoBehaviour {
 			}
 		} else {
 			if (player == ePlayer.Left) {
-				inputSpeed = Input.GetAxisRaw ("PlayerLeft");
+				inputSpeed = -Input.acceleration.x*(float)2;//Input.GetAxisRaw ("PlayerLeft");
 			} else if (player == ePlayer.Right) {
 				inputSpeed = Input.GetAxisRaw ("PlayerRight");
 			}

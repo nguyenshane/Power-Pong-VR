@@ -75,7 +75,7 @@ MonoBehaviour:
   showStereoCam: 1
   IPD: .0599999987
   backgroundColor: {r: 0, g: 0, b: 0, a: 1}
-  FOV: 38
+  FOV: 50.8800011
   mainCamera: {fileID: 0}
   enableGyroCam: 1
   contrainHeadMovement: 0
