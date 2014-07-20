@@ -1,34 +1,36 @@
 ﻿#pragma strict
 
-static var audiovolume:float = 0.5;
-static var brightness:float = 1.0;
+var speed : float = 3.0; //how fast the object should rotate
 
-var activate = false;
-var speed : float = 1.0; //how fast the object should rotate
-var mainlight: float;
-var optionslight: float;
-var creditslight:float;
+var initialRotation : UnityEngine.Quaternion;
+var gyroInitialRotation : UnityEngine.Quaternion;
+
+
 function Start () {
-	mainlight = GameObject.Find("Main Light").light.intensity;
-	optionslight = GameObject.Find("Options Light").light.intensity;
-	creditslight = GameObject.Find("Credits Light").light.intensity;
-	Screen.showCursor = false;
+	Input.gyro.enabled = true;
+	initialRotation = transform.rotation; 
+	gyroInitialRotation = Input.gyro.attitude;
 }
 
-function Update(){
-      AudioListener.volume = audiovolume;
-      GameObject.Find("Main Light").light.intensity = brightness * mainlight;
-      GameObject.Find("Options Light").light.intensity = brightness * optionslight;
-      GameObject.Find("Credits Light").light.intensity = brightness * creditslight;
-      
- if (activate){
- 	  collider.isTrigger = true;
-      transform.Rotate(Vector3(-Input.GetAxis("Mouse Y"),Input.GetAxis("Mouse X"), 0)  * speed);
+function Update(){      
+      //transform.Rotate(Vector3(-Input.GetAxis("Mouse Y"),Input.GetAxis("Mouse X"), 0)  * speed);
       //Debug.Log("x= " + transform.localRotation.y + " y= "+ transform.localRotation.x);
-      var y = transform.localRotation.x;
-      var x = transform.localRotation.y;
-      transform.localRotation.z = 0;
-      if(x<-0.2) transform.localRotation.y = -0.2;
+      var y = transform.position.z;
+      //var x = transform.localRotation.y;
+      //transform.localRotation.z = 0;
+      
+      var offsetRotation : UnityEngine.Quaternion = Quaternion.Inverse(gyroInitialRotation) * Input.gyro.attitude;
+ 	  var correctRotation : UnityEngine.Quaternion = initialRotation * offsetRotation;
+ 	  
+      //transform.position.z += (correctRotation.x)*speed;
+      transform.position.z += -Input.GetAxis("Mouse Y");
+      
+      //Debug.Log(transform.position.z);
+      
+      if(y<-42.46) transform.position.z = -42.46;
+      if(y>-15.16) transform.position.z = -15.16;
+      
+      /*if(x<-0.2) transform.localRotation.y = -0.2;
       if(x>0.2) transform.localRotation.y = 0.2;
       if(y<0.65) transform.localRotation.x = 0.65;
       if(y>0.748) transform.localRotation.x = 0.748;
@@ -75,7 +77,5 @@ function Update(){
 	 		activate = false;
 			
 		} //else Debug.Log("Outside options");
-	}
-  }
-  else collider.isTrigger = false;
+	}*/
 }

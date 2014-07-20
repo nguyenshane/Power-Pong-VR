@@ -1,7 +1,7 @@
 #pragma strict
 
 function Start () {
-	initAccY = Input.acceleration.y;
+	//initAccY = Input.acceleration.y;
 	Input.gyro.enabled = true;
 	initialRotation = transform.rotation; 
 	gyroInitialRotation = Input.gyro.attitude;
@@ -9,13 +9,8 @@ function Start () {
 
 var speed : float = 3; //how fast the object should rotate
 var activate = true;
-var initAccY = 0f;
-var initQ = 0f;
-var initV = 0f;
 var initialRotation : UnityEngine.Quaternion;
 var gyroInitialRotation : UnityEngine.Quaternion;
-var enabledTime: float = 0.0;
-var nextEvent: float = 5.0;
 
 function Update(){
 Input.gyro.enabled = false;
