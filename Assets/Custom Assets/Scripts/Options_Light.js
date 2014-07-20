@@ -68,8 +68,10 @@ function Update(){
 			// Back
 			//Debug.Log("Pressed Back");
 			GameObject.Find("Main Menu Light").audio.Play(); 
-	 		var linkToScript = GameObject.Find("Camera").GetComponent(Menu_Camera);
+	 		var linkToScript = GameObject.Find("SBCamera").GetComponent(Menu_Camera);
 	 		linkToScript.ToMain();
+	 		var linkToScript2 = GameObject.Find("Main Menu Trigger").GetComponent(Main_Menu_Trigger);
+	 		linkToScript2.activate = true;
 	 		activate = false;
 			
 		} //else Debug.Log("Outside options");
