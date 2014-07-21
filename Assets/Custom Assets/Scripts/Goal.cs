@@ -24,7 +24,9 @@ public class Goal : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision Collection) {
-
+		if (Collection.gameObject.name == "BallG" || Collection.gameObject.name == "BallO") {
+			Handheld.Vibrate ();
+		}
 	}
 
 }
