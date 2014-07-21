@@ -136,7 +136,7 @@ public class ScoreScreen : MonoBehaviour {
 							Application.LoadLevel(0);
 						}
 						
-						//Orange has won
+					//Orange has won
 					} else if (orangeWon) {
 						GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "O R A N G E    W I N S!", boxO);
 						
@@ -156,7 +156,7 @@ public class ScoreScreen : MonoBehaviour {
 							Application.LoadLevel(0);
 						}
 						
-						//No winner yet
+					//No winner yet
 					} else {
 						GUI.Box(new Rect(padding, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
 						
