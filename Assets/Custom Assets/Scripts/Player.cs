@@ -260,6 +260,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
+		rigidbody.velocity = Vector3.zero; //stop it from drifting around from collisions
 		transform.position += new Vector3(0f, 0f, inputSpeed * speed * Time.deltaTime);
 	}
 
