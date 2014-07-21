@@ -178,7 +178,7 @@ public class Ball : MonoBehaviour {
 				}
 			//Side walls
 			} else if (Collection.gameObject.name == "Big Wall") {
-				if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(leftImpulse * (rigidbody.velocity.x / Mathf.Abs(rigidbody.velocity.x)), 0, 0), ForceMode.Impulse);
+				if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(Mathf.Abs(leftImpulse) * (rigidbody.velocity.x / Mathf.Abs(rigidbody.velocity.x)), 0, 0), ForceMode.Impulse);
 				else rigidbody.AddForce(new Vector3(leftImpulse, 0, 0), ForceMode.Impulse);
 			}
 		} else if (ball == eBall.Right) {
@@ -245,7 +245,7 @@ public class Ball : MonoBehaviour {
 				}
 			//Side walls
 			} else if (Collection.gameObject.name == "Big Wall") {
-				if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(rightImpulse * (rigidbody.velocity.x / Mathf.Abs(rigidbody.velocity.x)), 0, 0), ForceMode.Impulse);
+				if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(Mathf.Abs(rightImpulse) * (rigidbody.velocity.x / Mathf.Abs(rigidbody.velocity.x)), 0, 0), ForceMode.Impulse);
 				else rigidbody.AddForce(new Vector3(rightImpulse, 0, 0), ForceMode.Impulse);
 			}
 		} 

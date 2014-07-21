@@ -322,6 +322,7 @@ public class ScoreScreen : MonoBehaviour {
 		orangeAISelection = 2;
 		leftPlayer.updateOptions();
 		rightPlayer.updateOptions();
+		greenScore = orangeScore = 0;
 		showing = false;
 		Time.timeScale = 1;
 		Screen.showCursor = false;
