@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-var speed : float = 3.0; //how fast the object should rotate
+var speed : float = 10.0; //how fast the object should rotate
 
 var initialRotation : UnityEngine.Quaternion;
 var gyroInitialRotation : UnityEngine.Quaternion;
@@ -22,7 +22,7 @@ function Update(){
       var offsetRotation : UnityEngine.Quaternion = Quaternion.Inverse(gyroInitialRotation) * Input.gyro.attitude;
  	  var correctRotation : UnityEngine.Quaternion = initialRotation * offsetRotation;
  	  
-      //transform.position.z += (correctRotation.x)*speed;
+      transform.position.z += -(offsetRotation.x)*speed;
       transform.position.z += -Input.GetAxis("Mouse Y");
       
       //Debug.Log(transform.position.z);

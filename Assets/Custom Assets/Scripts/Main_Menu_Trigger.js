@@ -59,7 +59,7 @@ function Options(){
 function Credits(){
 	audio.Play();
 	GameObject.Find("SBCamera").GetComponent(Menu_Camera).ToCredits();
-	var creditslight = GameObject.Find("Credit Menu Light").GetComponent(Credits_Light);
+	var creditslight = GameObject.Find("Credits Menu Light").GetComponent(Credits_Light);
 	creditslight.activate = true;
 	activate = false;
 }

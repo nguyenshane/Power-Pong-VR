@@ -21,7 +21,7 @@ Input.gyro.enabled = true;
  	  var offsetRotation : UnityEngine.Quaternion = Quaternion.Inverse(gyroInitialRotation) * Input.gyro.attitude;
  	  var correctRotation : UnityEngine.Quaternion = initialRotation * offsetRotation;
  	  
-      transform.position.y += (correctRotation.x)*speed;
+      transform.position.y += (offsetRotation.x)*speed;
       transform.position.y += Input.GetAxis("Mouse Y");
       
       var y = transform.position.y;
