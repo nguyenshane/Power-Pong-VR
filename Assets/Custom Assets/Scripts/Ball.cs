@@ -82,19 +82,20 @@ public class Ball : MonoBehaviour {
 							if (rigidbody.velocity.x != 0) {
 								rigidbody.AddForce (new Vector3(rigidbody.velocity.x * (minXSpeed / rigidbody.velocity.x - 1), 0f, 0f), ForceMode.Impulse);
 							} else {
-								rigidbody.AddForce (new Vector3(minXSpeed, 0f, 0f), ForceMode.Impulse);
+								if (transform.position.x > 0) rigidbody.AddForce (new Vector3(-minXSpeed, 0f, 0f), ForceMode.Impulse);
+								else rigidbody.AddForce (new Vector3(minXSpeed, 0f, 0f), ForceMode.Impulse);
 							}
 						}
+					}
 
-						if (rigidbody.velocity.magnitude < minSpeed) {
-							if (rigidbody.velocity.magnitude != 0) {
-								rigidbody.AddForce (rigidbody.velocity * (minSpeed / rigidbody.velocity.magnitude - 1), ForceMode.Impulse);
-							} else {
-								rigidbody.AddForce (initialImpulse, ForceMode.Impulse);
-							}
-						} else if (rigidbody.velocity.magnitude > maxSpeed) {
-							rigidbody.AddForce (rigidbody.velocity * -1 * (1 - maxSpeed / rigidbody.velocity.magnitude), ForceMode.Impulse);
+					if (rigidbody.velocity.magnitude < minSpeed) {
+						if (rigidbody.velocity.magnitude != 0) {
+							rigidbody.AddForce (rigidbody.velocity * (minSpeed / rigidbody.velocity.magnitude - 1), ForceMode.Impulse);
+						} else {
+							rigidbody.AddForce (initialImpulse, ForceMode.Impulse);
 						}
+					} else if (rigidbody.velocity.magnitude > maxSpeed) {
+						rigidbody.AddForce (rigidbody.velocity * -1 * (1 - maxSpeed / rigidbody.velocity.magnitude), ForceMode.Impulse);
 					}
 				}
 			}
