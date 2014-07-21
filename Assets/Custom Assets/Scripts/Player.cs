@@ -32,47 +32,7 @@ public class Player : MonoBehaviour {
 		b1 = ball1.GetComponent<Ball>();
 		b2 = ball2.GetComponent<Ball>();
 
-		if (player == ePlayer.Left) {
-			switch (ScoreScreen.greenAISelection) {
-			case 0:
-				AIEnabled = true;
-				reactionTime = 0.4f;
-				accuracy = 0.1f;
-				break;
-
-			case 1:
-				AIEnabled = true;
-				reactionTime = 0.25f;
-				accuracy = 0.04f;
-				break;
-
-			case 2:
-				AIEnabled = true;
-				reactionTime = 0.1f;
-				accuracy = 0.02f;
-				break;
-			}
-		} else {
-			switch (ScoreScreen.orangeAISelection) {
-			case 0:
-				AIEnabled = true;
-				reactionTime = 0.4f;
-				accuracy = 0.1f;
-				break;
-				
-			case 1:
-				AIEnabled = true;
-				reactionTime = 0.25f;
-				accuracy = 0.04f;
-				break;
-				
-			case 2:
-				AIEnabled = true;
-				reactionTime = 0.1f;
-				accuracy = 0.02f;
-				break;
-			}
-		}
+		updateOptions();
 
 		reactionTimer = reactionTime;
 	}
@@ -262,5 +222,57 @@ public class Player : MonoBehaviour {
 		if (newZScale > maxSize) transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, maxSize);
 		else if (newZScale < minSize) transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, minSize);
 		else transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, newZScale);
+	}
+
+	public void updateOptions() {
+		if (player == ePlayer.Left) {
+			switch (ScoreScreen.greenAISelection) {
+			case 0:
+				AIEnabled = true;
+				reactionTime = 0.4f;
+				accuracy = 0.1f;
+				break;
+				
+			case 1:
+				AIEnabled = true;
+				reactionTime = 0.25f;
+				accuracy = 0.04f;
+				break;
+				
+			case 2:
+				AIEnabled = true;
+				reactionTime = 0.1f;
+				accuracy = 0.02f;
+				break;
+				
+			case 3:
+				AIEnabled = false;
+				break;
+			}
+		} else {
+			switch (ScoreScreen.orangeAISelection) {
+			case 0:
+				AIEnabled = true;
+				reactionTime = 0.4f;
+				accuracy = 0.1f;
+				break;
+				
+			case 1:
+				AIEnabled = true;
+				reactionTime = 0.25f;
+				accuracy = 0.04f;
+				break;
+				
+			case 2:
+				AIEnabled = true;
+				reactionTime = 0.1f;
+				accuracy = 0.02f;
+				break;
+				
+			case 3:
+				AIEnabled = false;
+				break;
+			}
+		}
 	}
 }

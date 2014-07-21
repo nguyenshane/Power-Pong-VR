@@ -36,10 +36,17 @@ public class ScoreScreen : MonoBehaviour {
 	float screenRatio;
 	float waitTime = 3.0f;
 	float seebrightTimer;
+	Player leftPlayer, rightPlayer;
 
 	// Use this for initialization
 	void Start () {
 		instanceCount++;
+
+		leftPlayer = GameObject.Find ("Player Left").GetComponent<Player>();
+		rightPlayer = GameObject.Find ("Player Right").GetComponent<Player>();
+
+		greenAISelection = 3;
+		orangeAISelection = 2;
 
 		if (instanceCount > 1) {
 			instanceCount--;
@@ -104,6 +111,9 @@ public class ScoreScreen : MonoBehaviour {
 		if (showing == true) {
 			if (seebrightEnabled) {
 				//currently skips the screen and goes to level 1 with a hard AI for opposing player after a few seconds, put a customized level selection screen here if we want one or make it go to other levels when they're ready for seebright
+				greenAISelection = 3;
+				orangeAISelection = 2;
+
 				if (seebrightTimer > 0) {
 
 					//Green has won
@@ -308,6 +318,10 @@ public class ScoreScreen : MonoBehaviour {
 	}
 
 	private void goToCurrentLevel() {
+		greenAISelection = 3;
+		orangeAISelection = 2;
+		leftPlayer.updateOptions();
+		rightPlayer.updateOptions();
 		showing = false;
 		Time.timeScale = 1;
 		Screen.showCursor = false;
