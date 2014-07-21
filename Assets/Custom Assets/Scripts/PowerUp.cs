@@ -23,7 +23,7 @@ public class PowerUp : MonoBehaviour {
 			vel = vel / vel.magnitude * accelSpeed * Time.deltaTime;
 			rigidbody.AddForce (vel, ForceMode.Impulse);
 		} else if (/*rigidbody.velocity.magnitude > minSpeed * 1.5f && */target != null) {
-			rigidbody.AddForce (-rigidbody.velocity * 0.75f * Time.deltaTime, ForceMode.Impulse);
+			rigidbody.AddForce (-rigidbody.velocity * 0.5f * Time.deltaTime, ForceMode.Impulse);
 		}
 	}
 
