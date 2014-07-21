@@ -97,8 +97,13 @@ public class ScoreScreen : MonoBehaviour {
 	void OnGUI() {
 		//Showing level selection menu
 		if (showing == true) {
-			if (/*seebrightEnabled*/true) {
-				//copypaste seebright customized menu here and change the above statement
+			if (seebrightEnabled) {
+				//currently skips the screen and goes to level 1 with a hard AI for opposing player, put a customized level selection screen here if we want one or make it go to other levels when they're ready for seebright
+				greenScore = orangeScore = 0;
+				orangeAISelection = 3;
+				currentLevel = 1;
+				goToCurrentLevel();
+				return;
 			} else {
 				//Green has won
 				if (greenWon) {

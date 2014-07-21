@@ -35,6 +35,8 @@ public class Ball : MonoBehaviour {
 	float currentDropDelay;
 	bool dontDrop = false;
 	bool neutral = false;
+	float speedChangeBuffer = 0.05f;
+	float currentSpeedBuffer;
 
 
 	// Use this for initialization
@@ -49,6 +51,7 @@ public class Ball : MonoBehaviour {
 			else rigidbody.AddForce(rightImpulse_F, ForceMode.Impulse);
 		}
 
+		currentSpeedBuffer = speedChangeBuffer;
 		currentDropDelay = initialDropDelay;
 	}
 
@@ -72,22 +75,26 @@ public class Ball : MonoBehaviour {
 					score.GetComponent<Scores>().increaseMultiplier();
 					rigidbody.AddForce (initialImpulse * score.GetComponent<Scores>().getMultiplier(), ForceMode.Impulse);
 				} else if (rigidbody.position.y == height) {
-					if (Mathf.Abs(rigidbody.velocity.x) < minXSpeed) {
-						if (rigidbody.velocity.x != 0) {
-							rigidbody.AddForce (new Vector3(rigidbody.velocity.x * (minXSpeed / rigidbody.velocity.x - 1), 0f, 0f), ForceMode.Impulse);
-						} else {
-							rigidbody.AddForce (new Vector3(minXSpeed, 0f, 0f), ForceMode.Impulse);
+					if (currentSpeedBuffer > 0) {
+						currentSpeedBuffer -= Time.deltaTime;
+					} else {
+						if (Mathf.Abs(rigidbody.velocity.x) < minXSpeed) {
+							if (rigidbody.velocity.x != 0) {
+								rigidbody.AddForce (new Vector3(rigidbody.velocity.x * (minXSpeed / rigidbody.velocity.x - 1), 0f, 0f), ForceMode.Impulse);
+							} else {
+								rigidbody.AddForce (new Vector3(minXSpeed, 0f, 0f), ForceMode.Impulse);
+							}
 						}
-					}
 
-					if (rigidbody.velocity.magnitude < minSpeed) {
-						if (rigidbody.velocity.magnitude != 0) {
-							rigidbody.AddForce (rigidbody.velocity * (minSpeed / rigidbody.velocity.magnitude - 1), ForceMode.Impulse);
-						} else {
-							rigidbody.AddForce (initialImpulse, ForceMode.Impulse);
+						if (rigidbody.velocity.magnitude < minSpeed) {
+							if (rigidbody.velocity.magnitude != 0) {
+								rigidbody.AddForce (rigidbody.velocity * (minSpeed / rigidbody.velocity.magnitude - 1), ForceMode.Impulse);
+							} else {
+								rigidbody.AddForce (initialImpulse, ForceMode.Impulse);
+							}
+						} else if (rigidbody.velocity.magnitude > maxSpeed) {
+							rigidbody.AddForce (rigidbody.velocity * -1 * (1 - maxSpeed / rigidbody.velocity.magnitude), ForceMode.Impulse);
 						}
-					} else if (rigidbody.velocity.magnitude > maxSpeed) {
-						rigidbody.AddForce (rigidbody.velocity * -1 * (1 - maxSpeed / rigidbody.velocity.magnitude), ForceMode.Impulse);
 					}
 				}
 			}
@@ -96,6 +103,8 @@ public class Ball : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision Collection) {
+		currentSpeedBuffer = speedChangeBuffer; //Prevents the speed restrictions from causing wierd things when colliding
+
 		//GREEN PADDLE
 		if (ball == eBall.Left) {
 			//WITH ANY BRICK
