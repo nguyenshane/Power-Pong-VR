@@ -10,9 +10,6 @@ public class Scores : MonoBehaviour {
 
 	public eScore Score;
 
-	public GameObject scoreNumber;
-	public GameObject livesNumber;
-
 	public float goalSpeedMultiplier;
 	public int maxLives;
 
@@ -53,8 +50,6 @@ public class Scores : MonoBehaviour {
 
 		score = 0;
 		lives = maxLives;
-		scoreNumber.guiText.text = score.ToString();
-		livesNumber.guiText.text = lives.ToString();
 		currentMultiplier = 1;
 	}
 	
@@ -65,7 +60,6 @@ public class Scores : MonoBehaviour {
 
 	public void SetScore (int newScore) {
 		score = newScore;
-		scoreNumber.guiText.text = score.ToString();
 
 		if (Score == eScore.Green) scoreScreen.greenScore = score;
 		else scoreScreen.orangeScore = score;
@@ -73,28 +67,18 @@ public class Scores : MonoBehaviour {
 
 	public void AddScore (int newScore) {
 		score += newScore;
-		scoreNumber.guiText.text = score.ToString();
 
 		if (Score == eScore.Green) scoreScreen.greenScore = score;
 		else scoreScreen.orangeScore = score;
 	}
 
 	public void RemoveLife() {
-		if (lives > 0 ) {
-			lives--;
-		}
-		livesNumber.guiText.text = lives.ToString();
+		if (lives > 0) lives--;
 
 		if (Score == eScore.Green) scoreScreen.greenLives = lives;
 		else if (Score == eScore.Orange) scoreScreen.orangeLives = lives;
 
-		//if (lives <= 0) {
-			//if (Score == eScore.Green) scoreScreen.orangeWins++;
-			//else if (Score == eScore.Orange) scoreScreen.greenWins++;
-
-			//scoreScreen.activate();
-			scoreScreen.handleScore();
-		//}
+		scoreScreen.handleScore();
 	}
 
 	public int getLives() {

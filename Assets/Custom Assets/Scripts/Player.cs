@@ -35,49 +35,41 @@ public class Player : MonoBehaviour {
 		if (player == ePlayer.Left) {
 			switch (ScoreScreen.greenAISelection) {
 			case 0:
-				AIEnabled = false;
+				AIEnabled = true;
+				reactionTime = 0.4f;
+				accuracy = 0.1f;
 				break;
 
 			case 1:
 				AIEnabled = true;
-				reactionTime = 0.5f;
-				accuracy = 0.2f;
+				reactionTime = 0.25f;
+				accuracy = 0.04f;
 				break;
 
 			case 2:
 				AIEnabled = true;
-				reactionTime = 0.3f;
-				accuracy = 0.1f;
-				break;
-
-			case 3:
-				AIEnabled = true;
 				reactionTime = 0.1f;
-				accuracy = 0.025f;
+				accuracy = 0.02f;
 				break;
 			}
 		} else {
 			switch (ScoreScreen.orangeAISelection) {
 			case 0:
-				AIEnabled = false;
+				AIEnabled = true;
+				reactionTime = 0.4f;
+				accuracy = 0.1f;
 				break;
 				
 			case 1:
 				AIEnabled = true;
-				reactionTime = 0.5f;
-				accuracy = 0.2f;
+				reactionTime = 0.25f;
+				accuracy = 0.04f;
 				break;
 				
 			case 2:
 				AIEnabled = true;
-				reactionTime = 0.3f;
-				accuracy = 0.1f;
-				break;
-				
-			case 3:
-				AIEnabled = true;
 				reactionTime = 0.1f;
-				accuracy = 0.025f;
+				accuracy = 0.02f;
 				break;
 			}
 		}
@@ -260,6 +252,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
+		rigidbody.velocity = Vector3.zero; //stop it from drifting around from collisions
 		transform.position += new Vector3(0f, 0f, inputSpeed * speed * Time.deltaTime);
 	}
 

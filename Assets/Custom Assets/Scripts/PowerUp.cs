@@ -22,6 +22,8 @@ public class PowerUp : MonoBehaviour {
 			vel.z += Random.Range(-2.0f, 2.0f);
 			vel = vel / vel.magnitude * accelSpeed * Time.deltaTime;
 			rigidbody.AddForce (vel, ForceMode.Impulse);
+		} else if (/*rigidbody.velocity.magnitude > minSpeed * 1.5f && */target != null) {
+			rigidbody.AddForce (-rigidbody.velocity * 0.5f * Time.deltaTime, ForceMode.Impulse);
 		}
 	}
 
