@@ -17,6 +17,7 @@ public class ScoreScreen : MonoBehaviour {
 	public GUIStyle label, labelG, labelO;
 	public GUIStyle button;
 	public GUIStyle checkboxL, checkboxR;
+	public GUIStyle cursor;
 	public Texture level1, level2, level3;
 
 	public int currentLevel;
@@ -36,6 +37,7 @@ public class ScoreScreen : MonoBehaviour {
 	float screenRatio;
 	float waitTime = 3.0f;
 	float seebrightTimer;
+	float cursorX, cursorY;
 	Player leftPlayer, rightPlayer;
 
 	// Use this for initialization
@@ -60,6 +62,9 @@ public class ScoreScreen : MonoBehaviour {
 		if (seebrightEnabled) {
 			screenWidth /= 2;
 		}
+
+		cursorX = screenWidth / 2;
+		cursorY = screenHeight / 2;
 
 		screenRatio = screenWidth / 1000.0f;
 		padding = (int)(padding * screenRatio);
@@ -86,6 +91,8 @@ public class ScoreScreen : MonoBehaviour {
 		checkboxR.fixedHeight = (int)(checkboxR.fixedHeight * screenRatio);
 		checkboxL.fixedWidth = (int)(checkboxL.fixedWidth * screenRatio);
 		checkboxR.fixedWidth = (int)(checkboxR.fixedWidth * screenRatio);
+		cursor.fixedHeight = (int)(cursor.fixedHeight * screenRatio);
+		cursor.fixedWidth = (int)(cursor.fixedWidth * screenRatio);
 
 		seebrightTimer = waitTime;
 		greenLives = orangeLives = greenScore = orangeScore = greenWins = orangeWins = greenTotalWins = orangeTotalWins = 0;
@@ -103,7 +110,19 @@ public class ScoreScreen : MonoBehaviour {
 			else deactivateEscMenu();
 		}
 
-		if (seebrightTimer > 0) seebrightTimer -= 0.01f;
+		//Framerate dependent since timeScale = 0
+		if ((showing || escShowing) && seebrightEnabled) {
+			cursorX += Input.acceleration.x / 60f;
+			cursorY += Input.acceleration.y / 60f;
+
+			if (cursorX < 0) cursorX = 0;
+			else if (cursorX > screenWidth) cursorX = screenWidth;
+
+			if (cursorY < 0) cursorY = 0;
+			else if (cursorY > screenHeight) cursorY = screenHeight;
+
+			if (seebrightTimer > 0) seebrightTimer -= 0.01f;
+		}
 	}
 
 	void OnGUI() {
@@ -190,6 +209,8 @@ public class ScoreScreen : MonoBehaviour {
 					orangeAISelection = GUI.SelectionGrid(new Rect(screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - 40 * screenRatio, width, width), orangeAISelection, AIOptions, 1, checkboxL);
 					orangeLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + 100 * screenRatio, width, width / 2), orangeLivesSelection, livesOptions, 1, checkboxL);
 
+					//Cursor
+					GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 				} else {
 					seebrightTimer = waitTime;
 					greenScore = orangeScore = 0;
