@@ -368,7 +368,7 @@ public class ScoreScreen : MonoBehaviour {
 			GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
 			
 			//Continue button
-			if (GUI.Button(continueButton, "Continue", button)) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+			if (GUI.Button(continueButton, "Continue", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
 				if (seebrightTimer <= 0) {
 					seebrightTimer = waitTime;
 					deactivateEscMenu();
