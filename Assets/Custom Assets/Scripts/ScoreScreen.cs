@@ -132,8 +132,10 @@ public class ScoreScreen : MonoBehaviour {
 
 		//Framerate dependent since timeScale = 0
 		if ((showing || escShowing) && seebrightEnabled) {
-			cursorX += Input.acceleration.x / 60f;
-			cursorY += Input.acceleration.y / 60f;
+			//cursorX += Input.acceleration.x * 2f;
+			//cursorY += Input.acceleration.y * 2f;
+			cursorX = Input.mousePosition.x;
+			cursorY = -Input.mousePosition.y*2;
 
 			if (cursorX < 0) cursorX = 0;
 			else if (cursorX > screenWidth) cursorX = screenWidth;
