@@ -50,9 +50,6 @@ public class ScoreScreen : MonoBehaviour {
 		leftPlayer = GameObject.Find ("Player Left").GetComponent<Player>();
 		rightPlayer = GameObject.Find ("Player Right").GetComponent<Player>();
 
-		greenAISelection = 3;
-		orangeAISelection = 2;
-
 		if (instanceCount > 1) {
 			instanceCount--;
 			Destroy(gameObject);
@@ -100,14 +97,14 @@ public class ScoreScreen : MonoBehaviour {
 		returnToMenuButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio);
 		continueButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 200 * screenRatio, 240 * screenRatio, 60 * screenRatio);
 
-		AIOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - 40 * screenRatio, 256 * screenRatio, 96 * screenRatio);
-		AIOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 - 0) * screenRatio, 256 * screenRatio, 32 * screenRatio);
-		AIOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 - 32) * screenRatio, 256 * screenRatio, 32 * screenRatio);
-		AIOptions2Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 - 64) * screenRatio, 256 * screenRatio, 32 * screenRatio);
+		AIOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - 40 * screenRatio, 256 * screenRatio, (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 3);
+		AIOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 0), 256 * screenRatio, checkboxL.fixedHeight);
+		AIOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 1), 256 * screenRatio, checkboxL.fixedHeight);
+		AIOptions2Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 2), 256 * screenRatio, checkboxL.fixedHeight);
 
-		livesOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + 100 * screenRatio, 256 * screenRatio, 64 * screenRatio);
-		livesOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + (100 + 0) * screenRatio, 256 * screenRatio, 32 * screenRatio);
-		livesOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + (100 + 32) * screenRatio, 256 * screenRatio, 32 * screenRatio);
+		livesOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + 100 * screenRatio, 256 * screenRatio, (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 2);
+		livesOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + (100 * screenRatio + (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 0), 256 * screenRatio, checkboxL.fixedHeight);
+		livesOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + (100 * screenRatio + (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 1), 256 * screenRatio, checkboxL.fixedHeight);
 
 		level1Box = new Rect (screenWidth / 2 - (300 + 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio);
 		level2Box = new Rect (screenWidth / 2 - 112 * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio);
@@ -117,6 +114,10 @@ public class ScoreScreen : MonoBehaviour {
 		greenLives = orangeLives = greenScore = orangeScore = greenWins = orangeWins = greenTotalWins = orangeTotalWins = 0;
 		greenAISelection = orangeAISelection = greenLivesSelection = orangeLivesSelection = 0;
 		levelSelection = -1;
+
+		greenAISelection = 3;
+		orangeAISelection = 2;
+
 		showing = escShowing = false;
 		DontDestroyOnLoad(transform.gameObject);
 		activateBefore();
@@ -326,14 +327,14 @@ public class ScoreScreen : MonoBehaviour {
 
 		//In-game
 		} else {
-			if (showFPS) GUI.Label(new Rect(24 * screenRatio, 24 * screenRatio, 200 * screenRatio, 40 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
+			if (showFPS) GUI.Label(new Rect(24 * screenRatio, 24 * screenRatio, 400 * screenRatio, 80 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
 
 			//Draw scores and lives
-			GUI.Label(new Rect(80 * screenRatio, screenHeight - 100 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + greenScore.ToString(), labelG);
-			GUI.Label(new Rect(80 * screenRatio, screenHeight - 60 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + greenLives.ToString(), labelG);
+			GUI.Label(new Rect(80 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + greenScore.ToString(), labelG);
+			GUI.Label(new Rect(80 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + greenLives.ToString(), labelG);
 
-			GUI.Label(new Rect(screenWidth - 200 * screenRatio, screenHeight - 100 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + orangeScore.ToString(), labelO);
-			GUI.Label(new Rect(screenWidth - 200 * screenRatio, screenHeight - 60 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + orangeLives.ToString(), labelO);
+			GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + orangeScore.ToString(), labelO);
+			GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + orangeLives.ToString(), labelO);
 		}
 	}
 
