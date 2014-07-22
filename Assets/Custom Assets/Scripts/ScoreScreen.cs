@@ -10,7 +10,9 @@ public class ScoreScreen : MonoBehaviour {
 
 	private int padding = 0;
 	private int width = 320;
-	private const float waitTime = 1.0f;
+	private const float waitTime = 1.0f; //Click timer duration
+	private const float waitDistance = 1.0f; //Degrees per frame that the device must be rotated in order to reset the click timer
+	private const float cursorSensitivity = 2.0f; //Cursor movement speed multiplier
 	private string[] AIOptions = new string[] {"Easy", "Medium", "Hard"};
 	private string[] livesOptions = new string[] {"3   Lives", "5   Lives"};
 
@@ -39,7 +41,7 @@ public class ScoreScreen : MonoBehaviour {
 	float screenRatio;
 	float seebrightTimer;
 	float cursorX, cursorY;
-	Vector3 previousAttitude, currentAttitude;
+	Quaternion previousAttitude, currentAttitude;
 	Player leftPlayer, rightPlayer;
 	Rect returnToMenuButton, continueButton, AIOptionsBox, livesOptionsBox, level1Box, level2Box, level3Box;
 	Rect AIOptions0Box, AIOptions1Box, AIOptions2Box, livesOptions0Box, livesOptions1Box;
@@ -141,15 +143,17 @@ public class ScoreScreen : MonoBehaviour {
 
 		//Framerate dependent since timeScale = 0
 		if ((showing || escShowing) && seebrightEnabled) {
-			if (Input.acceleration.magnitude > 0.5f) seebrightTimer = waitTime;
-			else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
-
 			currentAttitude = Input.gyro.attitude;
 
-			cursorX += (currentAttitude.x - previousAttitude.x) * 2f;
-			cursorY += (currentAttitude.y - previousAttitude.y) * 2f;
+			float gyroChange = Mathf.Abs(Quaternion.Angle(currentAttitude, previousAttitude));
+
+			if (gyroChange > waitDistance) seebrightTimer = waitTime;
+			else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
+
+			cursorX += (currentAttitude.x - previousAttitude.x) * cursorSensitivity;
+			cursorY += (currentAttitude.y - previousAttitude.y) * cursorSensitivity;
 			//cursorX = Input.mousePosition.x;
-			//cursorY = -Input.mousePosition.y*2;
+			//cursorY = -Input.mousePosition.y * 2;
 
 			previousAttitude = currentAttitude;
 
