@@ -11,7 +11,7 @@ public class ScoreScreen : MonoBehaviour {
 	private int padding = 0;
 	private int width = 320;
 	private const float waitTime = 1.0f; //Click timer duration
-	private const float waitDistance = 1.0f; //Degrees per frame that the device must be rotated in order to reset the click timer
+	private const float waitDistance = 600.0f; //Degrees per frame that the device must be rotated in order to reset the click timer (60 = 1 degree per second)
 	private const float cursorSensitivity = 2.0f; //Cursor movement speed multiplier
 	private string[] AIOptions = new string[] {"Easy", "Medium", "Hard"};
 	private string[] livesOptions = new string[] {"3   Lives", "5   Lives"};
@@ -150,8 +150,12 @@ public class ScoreScreen : MonoBehaviour {
 			if (gyroChange > waitDistance) seebrightTimer = waitTime;
 			else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
 
-			cursorX += (currentAttitude.x - previousAttitude.x) * cursorSensitivity;
-			cursorY += (currentAttitude.y - previousAttitude.y) * cursorSensitivity;
+			if (currentAttitude.x - previousAttitude.x < 0) cursorX += (currentAttitude.x - previousAttitude.x + 360f) * cursorSensitivity;
+			else cursorX += (currentAttitude.x - previousAttitude.x) * cursorSensitivity;
+
+			if (currentAttitude.y - previousAttitude.y < 0) cursorY += (currentAttitude.y - previousAttitude.y + 360f) * cursorSensitivity;
+			else cursorY += (currentAttitude.y - previousAttitude.y) * cursorSensitivity;
+
 			//cursorX = Input.mousePosition.x;
 			//cursorY = -Input.mousePosition.y * 2;
 
