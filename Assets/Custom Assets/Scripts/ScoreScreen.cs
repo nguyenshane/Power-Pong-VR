@@ -142,6 +142,10 @@ public class ScoreScreen : MonoBehaviour {
 			else deactivateEscMenu();
 		}
 
+		Quaternion offset2 = Quaternion.Inverse(previousAttitude) * currentAttitude;
+		
+		Debug.Log(offset2.x);
+
 		//Framerate dependent since timeScale = 0
 		if ((showing || escShowing) && seebrightEnabled) {
 			currentAttitude = Input.gyro.attitude;
@@ -160,8 +164,10 @@ public class ScoreScreen : MonoBehaviour {
 			*/
 
 			Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
-			cursorX += offset.y * cursorSensitivity ;
+			cursorX += offset.y * cursorSensitivity;
 			cursorY += -offset.x * cursorSensitivity;
+
+			Debug.Log(offset.y);
 
 			//previousAttitude = currentAttitude;
 
@@ -214,7 +220,7 @@ public class ScoreScreen : MonoBehaviour {
 					if (GUI.Button(level1Box, level1, blank) || level1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
 						if (seebrightTimer <= 0) {
 							seebrightTimer = waitTime;
-							currentLevel = 1;
+							currentLevel = 2;
 							goToCurrentLevel();
 						}
 					}
@@ -222,7 +228,7 @@ public class ScoreScreen : MonoBehaviour {
 					if (GUI.Button(level2Box, level2, blank) || level2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
 						if (seebrightTimer <= 0) {
 							seebrightTimer = waitTime;
-							currentLevel = 2;
+							currentLevel = 3;
 							goToCurrentLevel();
 						}
 					}
@@ -230,7 +236,7 @@ public class ScoreScreen : MonoBehaviour {
 					if (GUI.Button(level3Box, level3, blank) || level3Box.Contains(new Vector3(cursorX, cursorY, 0))) {
 						if (seebrightTimer <= 0) {
 							seebrightTimer = waitTime;
-							currentLevel = 3;
+							currentLevel = 4;
 							goToCurrentLevel();
 						}
 					}
@@ -318,7 +324,7 @@ public class ScoreScreen : MonoBehaviour {
 						Screen.showCursor = false;
 						instanceCount--;
 						Destroy(gameObject);
-						Application.LoadLevel(0);
+						Application.LoadLevel(1);
 					}
 
 				//No winner yet
@@ -329,17 +335,17 @@ public class ScoreScreen : MonoBehaviour {
 					GUI.Label(new Rect(screenWidth / 2 - 100 * screenRatio, screenHeight - 240 * screenRatio, width, 40 * screenRatio), "Choose next level:", label);
 
 					if (GUI.Button(new Rect(screenWidth / 2 - (300 + 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level1, blank)) {
-						currentLevel = 1;
-						goToCurrentLevel();
-					}
-					
-					if (GUI.Button(new Rect(screenWidth / 2 - 112 * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level2, blank)) {
 						currentLevel = 2;
 						goToCurrentLevel();
 					}
 					
-					if (GUI.Button(new Rect(screenWidth / 2 + (300 - 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level3, blank)) {
+					if (GUI.Button(new Rect(screenWidth / 2 - 112 * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level2, blank)) {
 						currentLevel = 3;
+						goToCurrentLevel();
+					}
+					
+					if (GUI.Button(new Rect(screenWidth / 2 + (300 - 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level3, blank)) {
+						currentLevel = 4;
 						goToCurrentLevel();
 					}
 				}
@@ -428,11 +434,11 @@ public class ScoreScreen : MonoBehaviour {
 		if (greenWins >= maxLevels / 2 + maxLevels % 2) {
 			//greenTotalWins++;
 			greenWon = true;
-			currentLevel = 0;
+			currentLevel = 1;
 		} else if (orangeWins >= maxLevels / 2 + maxLevels % 2) {
 			//orangeTotalWins++;
 			orangeWon = true;
-			currentLevel = 0;
+			currentLevel = 1;
 		} else {
 			currentLevel++;
 		}
@@ -472,6 +478,6 @@ public class ScoreScreen : MonoBehaviour {
 		Screen.showCursor = false;
 		instanceCount--;
 		Destroy(gameObject);
-		Application.LoadLevel(0);
+		Application.LoadLevel(1);
 	}
 }

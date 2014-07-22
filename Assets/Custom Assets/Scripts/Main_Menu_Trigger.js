@@ -45,7 +45,7 @@ function OnTriggerExit(other: Collider) {
 // functions of the buttons
 function Play(){
 	audio.Play();
-	Application.LoadLevel("Level1");
+	Application.LoadLevel(Application.loadedLevel + 1);
 }
 
 function Options(){
