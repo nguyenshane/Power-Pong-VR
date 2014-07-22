@@ -39,22 +39,24 @@ public class ScoreScreen : MonoBehaviour {
 	float screenRatio;
 	float seebrightTimer;
 	float cursorX, cursorY;
+	Vector3 previousAttitude, currentAttitude;
 	Player leftPlayer, rightPlayer;
 	Rect returnToMenuButton, continueButton, AIOptionsBox, livesOptionsBox, level1Box, level2Box, level3Box;
 	Rect AIOptions0Box, AIOptions1Box, AIOptions2Box, livesOptions0Box, livesOptions1Box;
 
 	// Use this for initialization
 	void Start () {
+		//Singleton
 		instanceCount++;
-
-		leftPlayer = GameObject.Find ("Player Left").GetComponent<Player>();
-		rightPlayer = GameObject.Find ("Player Right").GetComponent<Player>();
 
 		if (instanceCount > 1) {
 			instanceCount--;
 			Destroy(gameObject);
 			return;
 		}
+
+		leftPlayer = GameObject.Find ("Player Left").GetComponent<Player>();
+		rightPlayer = GameObject.Find ("Player Right").GetComponent<Player>();
 
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;
@@ -63,8 +65,12 @@ public class ScoreScreen : MonoBehaviour {
 			screenWidth /= 2;
 		}
 
+		//Initial cursor location in center of screen
 		cursorX = screenWidth / 2;
 		cursorY = screenHeight / 2;
+
+		//Initial gyroscope orientation
+		previousAttitude = currentAttitude = Input.gyro.attitude;
 
 		screenRatio = screenWidth / 1000.0f;
 		padding = (int)(padding * screenRatio);
@@ -94,6 +100,7 @@ public class ScoreScreen : MonoBehaviour {
 		cursor.fixedHeight = (int)(cursor.fixedHeight * screenRatio);
 		cursor.fixedWidth = (int)(cursor.fixedWidth * screenRatio);
 
+		//Bounding boxes for interactable UI elements
 		returnToMenuButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio);
 		continueButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 200 * screenRatio, 240 * screenRatio, 60 * screenRatio);
 
@@ -115,11 +122,13 @@ public class ScoreScreen : MonoBehaviour {
 		greenAISelection = orangeAISelection = greenLivesSelection = orangeLivesSelection = 0;
 		levelSelection = -1;
 
+		//Green player is human (3)
 		greenAISelection = 3;
+		//Initial difficulty selection is hard (2)
 		orangeAISelection = 2;
 
 		showing = escShowing = false;
-		DontDestroyOnLoad(transform.gameObject);
+		DontDestroyOnLoad(transform.gameObject); //Keeps the object persistent between levels, allows it to retain information although static variables might be able to do the same
 		activateBefore();
 	}
 	
@@ -135,10 +144,14 @@ public class ScoreScreen : MonoBehaviour {
 			if (Input.acceleration.magnitude > 0.5f) seebrightTimer = waitTime;
 			else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
 
-			cursorX += Input.acceleration.x * 2f;
-			cursorY += Input.acceleration.y * 2f;
+			currentAttitude = Input.gyro.attitude;
+
+			cursorX += (currentAttitude.x - previousAttitude.x) * 2f;
+			cursorY += (currentAttitude.y - previousAttitude.y) * 2f;
 			//cursorX = Input.mousePosition.x;
 			//cursorY = -Input.mousePosition.y*2;
+
+			previousAttitude = currentAttitude;
 
 			if (cursorX < 0) cursorX = 0;
 			else if (cursorX > screenWidth) cursorX = screenWidth;
@@ -386,8 +399,8 @@ public class ScoreScreen : MonoBehaviour {
 		return currentLevel;
 	}
 
-	public void setCurrentLevel(int one) {
-		currentLevel = one;
+	public void setCurrentLevel(int level) {
+		currentLevel = level;
 	}
 
 	public void handleScore() {
@@ -419,6 +432,7 @@ public class ScoreScreen : MonoBehaviour {
 		showing = true;
 	}
 
+	//Activates score screen but doesn't do the automatic level transition (no effect since the player now selects them manually) and doesn't determine a winner
 	public void activateBefore() {
 		seebrightTimer = waitTime;
 		levelSelection = -1;
@@ -439,12 +453,8 @@ public class ScoreScreen : MonoBehaviour {
 		escShowing = false;
 	}
 
+	//Returns to main menu (initial game state) and clears the score screen instance completely
 	private void returnToMenu() {
-		greenScore = 0;
-		orangeScore = 0;
-		greenWins = 0;
-		orangeWins = 0;
-
 		showing = false;
 		Time.timeScale = 1;
 		Screen.showCursor = false;
