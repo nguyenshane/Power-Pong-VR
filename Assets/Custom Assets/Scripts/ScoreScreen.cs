@@ -10,7 +10,7 @@ public class ScoreScreen : MonoBehaviour {
 
 	private int padding = 0;
 	private int width = 320;
-	private const float waitTime = 3.0f;
+	private const float waitTime = 1.0f;
 	private string[] AIOptions = new string[] {"Easy", "Medium", "Hard"};
 	private string[] livesOptions = new string[] {"3   Lives", "5   Lives"};
 
@@ -132,10 +132,13 @@ public class ScoreScreen : MonoBehaviour {
 
 		//Framerate dependent since timeScale = 0
 		if ((showing || escShowing) && seebrightEnabled) {
-			//cursorX += Input.acceleration.x * 2f;
-			//cursorY += Input.acceleration.y * 2f;
-			cursorX = Input.mousePosition.x;
-			cursorY = -Input.mousePosition.y*2;
+			if (Input.acceleration.magnitude > 0.5f) seebrightTimer = waitTime;
+			else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
+
+			cursorX += Input.acceleration.x * 2f;
+			cursorY += Input.acceleration.y * 2f;
+			//cursorX = Input.mousePosition.x;
+			//cursorY = -Input.mousePosition.y*2;
 
 			if (cursorX < 0) cursorX = 0;
 			else if (cursorX > screenWidth) cursorX = screenWidth;
@@ -156,8 +159,7 @@ public class ScoreScreen : MonoBehaviour {
 					
 					//Return to menu button
 					if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-						if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
-						else {
+						if (seebrightTimer <= 0) {
 							seebrightTimer = waitTime;
 							greenWon = false;
 							returnToMenu();
@@ -170,8 +172,7 @@ public class ScoreScreen : MonoBehaviour {
 					
 					//Return to menu button
 					if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-						if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
-						else {
+						if (seebrightTimer <= 0) {
 							seebrightTimer = waitTime;
 							orangeWon = false;
 							returnToMenu();
@@ -186,18 +187,27 @@ public class ScoreScreen : MonoBehaviour {
 					GUI.Label(new Rect(screenWidth / 2 - 160 * screenRatio, screenHeight - 240 * screenRatio, width * 2, 60 * screenRatio), "Choose next level:", label);
 					
 					if (GUI.Button(level1Box, level1, blank) || level1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-						currentLevel = 1;
-						goToCurrentLevel();
+						if (seebrightTimer <= 0) {
+							seebrightTimer = waitTime;
+							currentLevel = 1;
+							goToCurrentLevel();
+						}
 					}
 					
 					if (GUI.Button(level2Box, level2, blank) || level2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-						currentLevel = 2;
-						goToCurrentLevel();
+						if (seebrightTimer <= 0) {
+							seebrightTimer = waitTime;
+							currentLevel = 2;
+							goToCurrentLevel();
+						}
 					}
 					
 					if (GUI.Button(level3Box, level3, blank) || level3Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-						currentLevel = 3;
-						goToCurrentLevel();
+						if (seebrightTimer <= 0) {
+							seebrightTimer = waitTime;
+							currentLevel = 3;
+							goToCurrentLevel();
+						}
 					}
 				}
 				
@@ -212,14 +222,36 @@ public class ScoreScreen : MonoBehaviour {
 				orangeAISelection = GUI.SelectionGrid(AIOptionsBox, orangeAISelection, AIOptions, 1, checkboxL);
 				orangeLivesSelection = GUI.SelectionGrid(livesOptionsBox, orangeLivesSelection, livesOptions, 1, checkboxL);
 
-				if (AIOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) orangeAISelection = 0;
-				else if (AIOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) orangeAISelection = 1;
-				else if (AIOptions2Box.Contains(new Vector3(cursorX, cursorY, 0))) orangeAISelection = 2;
+				if (AIOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeAISelection = 0;
+					}
+				} else if (AIOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeAISelection = 1;
+					}
+				} else if (AIOptions2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeAISelection = 2;
+					}
+				}
 
-				if (livesOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) orangeLivesSelection = greenLivesSelection = 0;
-				else if (livesOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) orangeLivesSelection = greenLivesSelection = 1;
+				if (livesOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeLivesSelection = greenLivesSelection = 0;
+					}
+				} else if (livesOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeLivesSelection = greenLivesSelection = 1;
+					}
+				}
 
-				//Cursor
+				//Draw cursor
 				GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 
 			//Non-Seebright GUI
