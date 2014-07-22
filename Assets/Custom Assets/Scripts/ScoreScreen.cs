@@ -72,6 +72,7 @@ public class ScoreScreen : MonoBehaviour {
 		cursorY = screenHeight / 2;
 
 		//Initial gyroscope orientation
+		Input.gyro.enabled = true;
 		previousAttitude = currentAttitude = Input.gyro.attitude;
 
 		screenRatio = screenWidth / 1000.0f;
@@ -150,16 +151,19 @@ public class ScoreScreen : MonoBehaviour {
 			if (gyroChange > waitDistance) seebrightTimer = waitTime;
 			else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
 
+			/*
 			if (currentAttitude.x - previousAttitude.x < 0) cursorX += (currentAttitude.x - previousAttitude.x + 360f) * cursorSensitivity;
 			else cursorX += (currentAttitude.x - previousAttitude.x) * cursorSensitivity;
 
 			if (currentAttitude.y - previousAttitude.y < 0) cursorY += (currentAttitude.y - previousAttitude.y + 360f) * cursorSensitivity;
 			else cursorY += (currentAttitude.y - previousAttitude.y) * cursorSensitivity;
+			*/
 
-			//cursorX = Input.mousePosition.x;
-			//cursorY = -Input.mousePosition.y * 2;
+			Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
+			cursorX += offset.x * cursorSensitivity;
+			cursorY += offset.y * cursorSensitivity;
 
-			previousAttitude = currentAttitude;
+			//previousAttitude = currentAttitude;
 
 			if (cursorX < 0) cursorX = 0;
 			else if (cursorX > screenWidth) cursorX = screenWidth;
