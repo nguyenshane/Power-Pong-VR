@@ -182,8 +182,10 @@ public class Ball : MonoBehaviour {
 				}
 			//Side walls
 			} else if (Collection.gameObject.name == "Big Wall") {
-				if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(Mathf.Abs(leftImpulse) * (rigidbody.velocity.x / Mathf.Abs(rigidbody.velocity.x)), 0, 0), ForceMode.Impulse);
-				else rigidbody.AddForce(new Vector3(leftImpulse, 0, 0), ForceMode.Impulse);
+				if (Mathf.Abs(rigidbody.velocity.x) < minXSpeed) {
+					if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(rigidbody.velocity.x * (minXSpeed / Mathf.Abs(rigidbody.velocity.x) - 1), 0, 0), ForceMode.Impulse);
+					else rigidbody.AddForce(new Vector3(-minXSpeed, 0, 0), ForceMode.Impulse);
+				}
 			}
 		} else if (ball == eBall.Right) {
 			if(Collection.gameObject.name == "Brick") {
@@ -249,8 +251,10 @@ public class Ball : MonoBehaviour {
 				}
 			//Side walls
 			} else if (Collection.gameObject.name == "Big Wall") {
-				if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(Mathf.Abs(rightImpulse) * (rigidbody.velocity.x / Mathf.Abs(rigidbody.velocity.x)), 0, 0), ForceMode.Impulse);
-				else rigidbody.AddForce(new Vector3(rightImpulse, 0, 0), ForceMode.Impulse);
+				if (Mathf.Abs(rigidbody.velocity.x) < minXSpeed) {
+					if (rigidbody.velocity.x != 0) rigidbody.AddForce(new Vector3(rigidbody.velocity.x * (minXSpeed / Mathf.Abs(rigidbody.velocity.x) - 1), 0, 0), ForceMode.Impulse);
+					else rigidbody.AddForce(new Vector3(minXSpeed, 0, 0), ForceMode.Impulse);
+				}
 			}
 		} 
 		//FIREBALLS
