@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* [Unused]
+ * 
+ */
+
 public class ChangeLevel : MonoBehaviour {
 	private GameObject level;
 	private ScoreScreen number;

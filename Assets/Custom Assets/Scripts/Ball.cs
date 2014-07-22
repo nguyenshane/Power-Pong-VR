@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * Handles ball movement and all ball collision events, including fireballs and neutral balls
+ */
+
 public enum eBall
 {
 	Left,

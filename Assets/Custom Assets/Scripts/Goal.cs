@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* 
+ * Activates phone vibration when a goal is scored
+ */
+
 public enum eGoal
 {
 	//Left = Green

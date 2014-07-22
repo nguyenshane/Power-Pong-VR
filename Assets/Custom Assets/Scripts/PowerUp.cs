@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * Handles powerup object movement and initiates their effects when they come into contact with a player paddle
+ */
+
 public class PowerUp : MonoBehaviour {
 
 	public int type;

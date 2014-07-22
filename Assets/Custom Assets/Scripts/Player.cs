@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * Handles paddle movement, AI and player input, and powerup effects that change the paddle
+ */
+
 public enum ePlayer 
 {
 	Left,

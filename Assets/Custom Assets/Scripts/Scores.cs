@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * Handles lives and score (although ScoreScreen does a lot of this as well, functionality should probably be moved around for consistency but I'm lazy)
+ */
+
 public enum eScore {
 	Green,
 	Orange
