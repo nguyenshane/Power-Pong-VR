@@ -75,7 +75,7 @@ public class ScoreScreen : MonoBehaviour {
 		
 		//Initial cursor location in center of screen
 		cursorX = screenWidth / 2;
-		cursorY = screenHeight / 2;
+		cursorY = screenHeight / 5 * 2;
 		
 		//Initial gyroscope orientation
 		Input.gyro.enabled = true;
@@ -179,7 +179,7 @@ public class ScoreScreen : MonoBehaviour {
 				//Cursor movement
 				if (useMouseForMenu) {
 					cursorX = Input.mousePosition.x;
-					cursorY = Input.mousePosition.y;
+					cursorY = -Input.mousePosition.y + screenHeight;
 				} else {
 					Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
 					cursorX += offset.y * cursorSensitivity;
@@ -247,7 +247,12 @@ public class ScoreScreen : MonoBehaviour {
 			currentLevel++;
 		}
 		
-		seebrightTimer = waitTime;
+		if (seebrightEnabled) {
+			cursorX = screenWidth / 2;
+			cursorY = screenHeight / 5 * 2;
+			seebrightTimer = waitTime;
+		} else Screen.showCursor = true;
+
 		levelSelection = -1;
 		Screen.showCursor = true;
 		Time.timeScale = 0;
@@ -256,15 +261,24 @@ public class ScoreScreen : MonoBehaviour {
 	
 	//Activates score screen but doesn't do the automatic level transition (no effect since the player now selects them manually) and doesn't determine a winner
 	public void activateBefore() {
-		seebrightTimer = waitTime;
+		if (seebrightEnabled) {
+			cursorX = screenWidth / 2;
+			cursorY = screenHeight / 5 * 2;
+			seebrightTimer = waitTime;
+		} else Screen.showCursor = true;
+
 		levelSelection = -1;
-		Screen.showCursor = true;
 		Time.timeScale = 0;
 		showing = true;
 	}
 	
 	public void activateEscMenu() {
-		Screen.showCursor = true;
+		if (seebrightEnabled) {
+			cursorX = screenWidth / 2;
+			cursorY = screenHeight / 5 * 2;
+			seebrightTimer = waitTime;
+		} else Screen.showCursor = true;
+
 		Time.timeScale = 0;
 		escShowing = true;
 	}
@@ -471,7 +485,7 @@ public class ScoreScreen : MonoBehaviour {
 		
 		//Draw cursor sprites
 		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
-		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2 + screenWidth, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
+		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2 + screenWidth, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 	}
 
 	//Draws the level selection menu on one side, does not handle the cursor
