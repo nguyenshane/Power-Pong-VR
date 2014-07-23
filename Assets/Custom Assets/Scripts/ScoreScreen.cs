@@ -145,15 +145,18 @@ public class ScoreScreen : MonoBehaviour {
 			else deactivateEscMenu();
 		}
 
+		//Activating menu by looking down (or up?)
 		if (Mathf.Abs(Vector3.Dot(Input.gyro.gravity, Vector3.down) / Input.gyro.gravity.magnitude) > 0.5f && !showing && !escShowing) {
 			activateEscMenu();
 		}
 				
 		if (showing || escShowing) {
+			//Cursor
 			//Framerate dependent since timeScale = 0
 			if ((showing || escShowing) && seebrightEnabled) {
 				float gyroChange = Mathf.Abs(Quaternion.Angle(currentAttitude, previousAttitude));
-				
+
+				//Reset timer if movement is too fast
 				if (gyroChange > waitDistance) seebrightTimer = waitTime;
 				else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
 				
@@ -164,7 +167,8 @@ public class ScoreScreen : MonoBehaviour {
 				if (currentAttitude.y - previousAttitude.y < 0) cursorY += (currentAttitude.y - previousAttitude.y + 360f) * cursorSensitivity;
 				else cursorY += (currentAttitude.y - previousAttitude.y) * cursorSensitivity;
 				*/
-				
+
+				//Cursor movement
 				Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
 				cursorX += offset.y * cursorSensitivity;
 				cursorY += -offset.x * cursorSensitivity;
@@ -186,133 +190,7 @@ public class ScoreScreen : MonoBehaviour {
 			drawSeebrightGUI(screenWidth); //Right GUI
 			handleCursor(); //Both cursors
 		} else {
-			//Non-Seebright GUI
-
-			//Showing level selection menu
-			if (showing == true) {
-				//Green has won
-				if (greenWon) {
-					GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "G R E E N    W I N S!", boxG);
-					
-					//Return to menu button
-					if (GUI.Button(new Rect(screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio), "Main  Menu", button)) {
-						greenScore = 0;
-						orangeScore = 0;
-						greenWins = 0;
-						orangeWins = 0;
-						greenWon = false;
-						
-						showing = false;
-						Time.timeScale = 1;
-						Screen.showCursor = false;
-						instanceCount--;
-						Destroy(gameObject);
-						Application.LoadLevel(0);
-					}
-					
-					//Orange has won
-				} else if (orangeWon) {
-					GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "O R A N G E    W I N S!", boxO);
-					
-					//Return to menu button
-					if (GUI.Button(new Rect(screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio), "Main  Menu", button)) {
-						greenScore = 0;
-						orangeScore = 0;
-						greenWins = 0;
-						orangeWins = 0;
-						orangeWon = false;
-						
-						showing = false;
-						Time.timeScale = 1;
-						Screen.showCursor = false;
-						instanceCount--;
-						Destroy(gameObject);
-						Application.LoadLevel(1);
-					}
-					
-					//No winner yet
-				} else {
-					GUI.Box(new Rect(padding, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
-					
-					//Level selection buttons
-					GUI.Label(new Rect(screenWidth / 2 - 100 * screenRatio, screenHeight - 240 * screenRatio, width, 40 * screenRatio), "Choose next level:", label);
-					
-					if (GUI.Button(new Rect(screenWidth / 2 - (300 + 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level1, blank)) {
-						currentLevel = 2;
-						goToCurrentLevel();
-					}
-					
-					if (GUI.Button(new Rect(screenWidth / 2 - 112 * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level2, blank)) {
-						currentLevel = 3;
-						goToCurrentLevel();
-					}
-					
-					if (GUI.Button(new Rect(screenWidth / 2 + (300 - 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level3, blank)) {
-						currentLevel = 4;
-						goToCurrentLevel();
-					}
-				}
-				
-				//Statistics
-				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 210 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
-				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 210 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-				
-				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
-				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
-				
-				//Green selections
-				GUI.Label(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 200 * screenRatio, 256 * screenRatio), "Player  1", labelG);
-				greenLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2, 128 * screenRatio, 64 * screenRatio), greenLivesSelection, livesOptions, 1, checkboxL);
-				greenAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), greenAISelection, AIOptions, 1, checkboxL);
-				
-				//Orange selections
-				GUI.Label(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 200 * screenRatio, 256 * screenRatio), "Player  2", labelO);
-				orangeLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 , 128 * screenRatio, 64 * screenRatio), orangeLivesSelection, livesOptions, 1, checkboxL);
-				orangeAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), orangeAISelection, AIOptions, 1, checkboxL);
-
-			//Showing escape menu
-			} else if (escShowing) {
-				GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
-				
-				//Continue button
-				if (GUI.Button(continueButton, "Continue", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-					drawBorder(continueButton);
-
-					if (seebrightTimer <= 0) {
-						seebrightTimer = waitTime;
-						deactivateEscMenu();
-					}
-				}
-				
-				//Return to menu button
-				if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-					drawBorder(returnToMenuButton);
-
-					if (seebrightTimer <= 0) {
-						seebrightTimer = waitTime;
-						greenWon = false;
-						returnToMenu();
-					}
-				}
-				
-				//Statistics
-				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
-				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-				
-				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
-				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
-			
-			//In-game
-			} else {
-				if (showFPS) GUI.Label(new Rect(24 * screenRatio, 24 * screenRatio, 400 * screenRatio, 80 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
-				
-				//Draw scores and lives
-				GUI.Label(new Rect(80 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + greenScore.ToString(), labelG);
-				GUI.Label(new Rect(80 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + greenLives.ToString(), labelG);
-				
-				GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + orangeScore.ToString(), labelO);
-				GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + orangeLives.ToString(), labelO);
-			}
+			drawNormalGUI();
 		}
 	}
 	
