@@ -26,6 +26,7 @@ public class ScoreScreen : MonoBehaviour {
 	public GUIStyle button;
 	public GUIStyle checkboxL, checkboxR;
 	public GUIStyle cursor;
+	public GUIStyle border;
 	public Texture level1, level2, level3;
 	
 	public int currentLevel;
@@ -107,14 +108,14 @@ public class ScoreScreen : MonoBehaviour {
 		returnToMenuButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio);
 		continueButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 200 * screenRatio, 240 * screenRatio, 60 * screenRatio);
 		
-		AIOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - 40 * screenRatio, 256 * screenRatio, (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 3);
-		AIOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 0), 256 * screenRatio, checkboxL.fixedHeight);
-		AIOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 1), 256 * screenRatio, checkboxL.fixedHeight);
-		AIOptions2Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 2), 256 * screenRatio, checkboxL.fixedHeight);
+		AIOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - 40 * screenRatio, 180 * screenRatio, (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 3);
+		AIOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio - 2, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 0) - 1, 180 * screenRatio + 4, checkboxL.fixedHeight + 4);
+		AIOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio - 2, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 1) - 1, 180 * screenRatio + 4, checkboxL.fixedHeight + 4);
+		AIOptions2Box = new Rect (screenWidth / 2 - 70 * screenRatio - 2, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 2) - 1, 180 * screenRatio + 4, checkboxL.fixedHeight + 4);
 		
-		livesOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + 100 * screenRatio, 256 * screenRatio, (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 2);
-		livesOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + (100 * screenRatio + (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 0), 256 * screenRatio, checkboxL.fixedHeight);
-		livesOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + (100 * screenRatio + (checkboxL.fixedHeight + checkboxL.margin.top + checkboxL.margin.bottom) * 1), 256 * screenRatio, checkboxL.fixedHeight);
+		livesOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 + 100 * screenRatio, 180 * screenRatio, (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 2);
+		livesOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio - 2, screenHeight / 2 + (100 * screenRatio + (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 0) - 1, 180 * screenRatio + 4, checkboxL.fixedHeight + 4);
+		livesOptions1Box = new Rect (screenWidth / 2 - 70 * screenRatio - 2, screenHeight / 2 + (100 * screenRatio + (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 1) - 1, 180 * screenRatio + 4, checkboxL.fixedHeight + 4);
 		
 		level1Box = new Rect (screenWidth / 2 - (300 + 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio);
 		level2Box = new Rect (screenWidth / 2 - 112 * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio);
@@ -180,113 +181,15 @@ public class ScoreScreen : MonoBehaviour {
 	}
 	
 	void OnGUI() {
-		//Showing level selection menu
-		if (showing == true) {
-			if (seebrightEnabled) {
-				
-				//Green has won
-				if (greenWon) {
-					GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "G R E E N    W I N S!", boxG);
-					
-					//Return to menu button
-					if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-						if (seebrightTimer <= 0) {
-							seebrightTimer = waitTime;
-							greenWon = false;
-							returnToMenu();
-						}
-					}
-					
-				//Orange has won
-				} else if (orangeWon) {
-					GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "O R A N G E    W I N S!", boxO);
-					
-					//Return to menu button
-					if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-						if (seebrightTimer <= 0) {
-							seebrightTimer = waitTime;
-							orangeWon = false;
-							returnToMenu();
-						}
-					}
-					
-				//No winner yet
-				} else {
-					GUI.Box(new Rect(padding, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
-					
-					//Level selection buttons
-					GUI.Label(new Rect(screenWidth / 2 - 160 * screenRatio, screenHeight - 240 * screenRatio, width * 2, 60 * screenRatio), "Choose next level:", label);
-					
-					if (GUI.Button(level1Box, level1, blank) || level1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-						if (seebrightTimer <= 0) {
-							seebrightTimer = waitTime;
-							currentLevel = 2;
-							goToCurrentLevel();
-						}
-					}
-					
-					if (GUI.Button(level2Box, level2, blank) || level2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-						if (seebrightTimer <= 0) {
-							seebrightTimer = waitTime;
-							currentLevel = 3;
-							goToCurrentLevel();
-						}
-					}
-					
-					if (GUI.Button(level3Box, level3, blank) || level3Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-						if (seebrightTimer <= 0) {
-							seebrightTimer = waitTime;
-							currentLevel = 4;
-							goToCurrentLevel();
-						}
-					}
-				}
-				
-				//Statistics
-				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 280 * screenRatio, width, 60 * screenRatio), "Match    Scores: ", label);
-				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 280 * screenRatio, width, 60 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-				
-				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), "Current    Wins: ", label);
-				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
-				
-				//Options
-				orangeAISelection= GUI.SelectionGrid(AIOptionsBox, orangeAISelection, AIOptions, 1, checkboxL);
-				orangeLivesSelection = greenLivesSelection = GUI.SelectionGrid(livesOptionsBox, orangeLivesSelection, livesOptions, 1, checkboxL);
-				
-				if (AIOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-					if (seebrightTimer <= 0) {
-						seebrightTimer = waitTime;
-						orangeAISelection = 0;
-					}
-				} else if (AIOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-					if (seebrightTimer <= 0) {
-						seebrightTimer = waitTime;
-						orangeAISelection = 1;
-					}
-				} else if (AIOptions2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-					if (seebrightTimer <= 0) {
-						seebrightTimer = waitTime;
-						orangeAISelection = 2;
-					}
-				}
-				
-				if (livesOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-					if (seebrightTimer <= 0) {
-						seebrightTimer = waitTime;
-						orangeLivesSelection = greenLivesSelection = 0;
-					}
-				} else if (livesOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
-					if (seebrightTimer <= 0) {
-						seebrightTimer = waitTime;
-						orangeLivesSelection = greenLivesSelection = 1;
-					}
-				}
-				
-				//Draw cursor
-				GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
-				
+		if (seebrightEnabled) {
+			drawSeebrightGUI(0); //Left GUI
+			drawSeebrightGUI(screenWidth); //Right GUI
+			handleCursor(); //Both cursors
+		} else {
 			//Non-Seebright GUI
-			} else {
+
+			//Showing level selection menu
+			if (showing == true) {
 				//Green has won
 				if (greenWon) {
 					GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "G R E E N    W I N S!", boxG);
@@ -358,57 +261,58 @@ public class ScoreScreen : MonoBehaviour {
 				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
 				
 				//Green selections
-				GUI.Label(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  1", labelG);
+				GUI.Label(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 200 * screenRatio, 256 * screenRatio), "Player  1", labelG);
 				greenLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2, 128 * screenRatio, 64 * screenRatio), greenLivesSelection, livesOptions, 1, checkboxL);
 				greenAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), greenAISelection, AIOptions, 1, checkboxL);
 				
 				//Orange selections
-				GUI.Label(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  2", labelO);
+				GUI.Label(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 200 * screenRatio, 256 * screenRatio), "Player  2", labelO);
 				orangeLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 , 128 * screenRatio, 64 * screenRatio), orangeLivesSelection, livesOptions, 1, checkboxL);
 				orangeAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), orangeAISelection, AIOptions, 1, checkboxL);
-			}
 
-		//Showing escape menu
-		} else if (escShowing) {
-			GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
-			
-			//Continue button
-			if (GUI.Button(continueButton, "Continue", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-				if (seebrightTimer <= 0) {
-					seebrightTimer = waitTime;
-					deactivateEscMenu();
+			//Showing escape menu
+			} else if (escShowing) {
+				GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
+				
+				//Continue button
+				if (GUI.Button(continueButton, "Continue", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(continueButton);
+
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						deactivateEscMenu();
+					}
 				}
-			}
-			
-			//Return to menu button
-			if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
-				if (seebrightTimer <= 0) {
-					seebrightTimer = waitTime;
-					greenWon = false;
-					returnToMenu();
+				
+				//Return to menu button
+				if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(returnToMenuButton);
+
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						greenWon = false;
+						returnToMenu();
+					}
 				}
+				
+				//Statistics
+				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
+				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
+				
+				GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
+				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			
+			//In-game
+			} else {
+				if (showFPS) GUI.Label(new Rect(24 * screenRatio, 24 * screenRatio, 400 * screenRatio, 80 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
+				
+				//Draw scores and lives
+				GUI.Label(new Rect(80 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + greenScore.ToString(), labelG);
+				GUI.Label(new Rect(80 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + greenLives.ToString(), labelG);
+				
+				GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + orangeScore.ToString(), labelO);
+				GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + orangeLives.ToString(), labelO);
 			}
-			
-			//Statistics
-			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-			
-			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
-			
-			//Draw cursor
-			GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
-			
-		//In-game
-		} else {
-			if (showFPS) GUI.Label(new Rect(24 * screenRatio, 24 * screenRatio, 400 * screenRatio, 80 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
-			
-			//Draw scores and lives
-			GUI.Label(new Rect(80 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + greenScore.ToString(), labelG);
-			GUI.Label(new Rect(80 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + greenLives.ToString(), labelG);
-			
-			GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + orangeScore.ToString(), labelO);
-			GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + orangeLives.ToString(), labelO);
 		}
 	}
 	
@@ -488,5 +392,367 @@ public class ScoreScreen : MonoBehaviour {
 		instanceCount--;
 		Destroy(gameObject);
 		Application.LoadLevel(1);
+	}
+
+	//Handles cursor interactions, draws border for selected object, and draws the cursor (should only be called once per GUI frame)
+	private void handleCursor() {
+		if (showing) {
+			if (greenWon || orangeWon) {
+				//Return to menu button
+				if (returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(returnToMenuButton);
+					drawBorder(new Rect(returnToMenuButton.left + screenWidth, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						greenWon = false;
+						returnToMenu();
+					}
+				}
+			} else {
+				//Level selection buttons
+				if (level1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(level1Box);
+					drawBorder(new Rect(level1Box.left + screenWidth, level1Box.top, level1Box.width, level1Box.height));
+
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						currentLevel = 2;
+						goToCurrentLevel();
+					}
+				} else if (level2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(level2Box);
+					drawBorder(new Rect(level2Box.left + screenWidth, level2Box.top, level2Box.width, level2Box.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						currentLevel = 3;
+						goToCurrentLevel();
+					}
+				} else if (level3Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(level3Box);
+					drawBorder(new Rect(level3Box.left + screenWidth, level3Box.top, level3Box.width, level3Box.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						currentLevel = 4;
+						goToCurrentLevel();
+					}
+				}
+
+				//Options
+				if (AIOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(AIOptions0Box);
+					drawBorder(new Rect(AIOptions0Box.left + screenWidth, AIOptions0Box.top, AIOptions0Box.width, AIOptions0Box.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeAISelection = 0;
+					}
+				} else if (AIOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(AIOptions1Box);
+					drawBorder(new Rect(AIOptions1Box.left + screenWidth, AIOptions1Box.top, AIOptions1Box.width, AIOptions1Box.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeAISelection = 1;
+					}
+				} else if (AIOptions2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(AIOptions2Box);
+					drawBorder(new Rect(AIOptions2Box.left + screenWidth, AIOptions2Box.top, AIOptions2Box.width, AIOptions2Box.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeAISelection = 2;
+					}
+				}
+				
+				if (livesOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(livesOptions0Box);
+					drawBorder(new Rect(livesOptions0Box.left + screenWidth, livesOptions0Box.top, livesOptions0Box.width, livesOptions0Box.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeLivesSelection = greenLivesSelection = 0;
+					}
+				} else if (livesOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(livesOptions1Box);
+					drawBorder(new Rect(livesOptions1Box.left + screenWidth, livesOptions1Box.top, livesOptions1Box.width, livesOptions1Box.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						orangeLivesSelection = greenLivesSelection = 1;
+					}
+				}
+			}
+		} else if (escShowing) {
+			//Continue button
+			if (continueButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+				drawBorder(continueButton);
+				drawBorder(new Rect(continueButton.left + screenWidth, continueButton.top, continueButton.width, continueButton.height));
+				
+				if (seebrightTimer <= 0) {
+					seebrightTimer = waitTime;
+					deactivateEscMenu();
+				}
+			}
+			
+			//Return to menu button
+			if (returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+				drawBorder(returnToMenuButton);
+				drawBorder(new Rect(returnToMenuButton.left + screenWidth, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height));
+				
+				if (seebrightTimer <= 0) {
+					seebrightTimer = waitTime;
+					greenWon = false;
+					returnToMenu();
+				}
+			}
+		} else {
+			//Don't draw cursor
+			return;
+		}
+		
+		//Draw cursor sprites
+		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
+		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2 + screenWidth, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
+	}
+
+	private void drawBorder(Rect box) {
+		GUI.Label(box, "", border);
+	}
+
+	//Draws the level selection menu on one side, does not handle the cursor
+	private void drawSeebrightGUI(int offset) {
+		if (showing) {
+			//Green has won
+			if (greenWon) {
+				GUI.Box(new Rect(padding + offset, padding, screenWidth - padding*2, screenHeight - padding*2), "G R E E N    W I N S!", boxG);
+				
+				//Return to menu button
+				if (GUI.Button(new Rect(returnToMenuButton.left + offset, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height), "Main  Menu", button)) {
+					drawBorder(new Rect(returnToMenuButton.left + offset, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height));
+					
+					greenWon = false;
+					returnToMenu();
+				}
+				
+			//Orange has won
+			} else if (orangeWon) {
+				GUI.Box(new Rect(padding + offset, padding, screenWidth - padding*2, screenHeight - padding*2), "O R A N G E    W I N S!", boxO);
+				
+				//Return to menu button
+				if (GUI.Button(new Rect(returnToMenuButton.left + offset, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height), "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(new Rect(returnToMenuButton.left + offset, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height));
+
+					orangeWon = false;
+					returnToMenu();
+				}
+				
+			//No winner yet
+			} else {
+				GUI.Box(new Rect(padding + offset, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
+				
+				//Level selection buttons
+				GUI.Label(new Rect(screenWidth / 2 - 160 * screenRatio + offset, screenHeight - 240 * screenRatio, width * 2, 60 * screenRatio), "Choose next level:", label);
+				
+				if (GUI.Button(new Rect(level1Box.left + offset, level1Box.top, level1Box.width, level1Box.height), level1, blank)) {
+					drawBorder(new Rect(level1Box.left + offset, level1Box.top, level1Box.width, level1Box.height));
+
+					currentLevel = 2;
+					goToCurrentLevel();
+				}
+				
+				if (GUI.Button(new Rect(level2Box.left + offset, level2Box.top, level2Box.width, level2Box.height), level2, blank)) {
+					drawBorder(new Rect(level2Box.left + offset, level2Box.top, level2Box.width, level2Box.height));
+					
+					currentLevel = 3;
+					goToCurrentLevel();
+				}
+				
+				if (GUI.Button(new Rect(level3Box.left + offset, level3Box.top, level3Box.width, level3Box.height), level3, blank)) {
+					drawBorder(new Rect(level3Box.left + offset, level3Box.top, level3Box.width, level3Box.height));
+					
+					currentLevel = 4;
+					goToCurrentLevel();
+				}
+			}
+			
+			//Statistics
+			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 280 * screenRatio, width, 60 * screenRatio), "Match    Scores: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 280 * screenRatio, width, 60 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
+			
+			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), "Current    Wins: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			
+			//Options
+			orangeAISelection = GUI.SelectionGrid(new Rect(AIOptionsBox.left + offset, AIOptionsBox.top, AIOptionsBox.width, AIOptionsBox.height), orangeAISelection, AIOptions, 1, checkboxL);
+			orangeLivesSelection = greenLivesSelection = GUI.SelectionGrid(new Rect(livesOptionsBox.left + offset, livesOptionsBox.top, livesOptionsBox.width, livesOptionsBox.height), orangeLivesSelection, livesOptions, 1, checkboxL);
+		
+		//Showing escape menu
+		} else if (escShowing) {
+			GUI.Box(new Rect(padding + offset, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
+
+			//Continue button
+			if (GUI.Button(new Rect(continueButton.left + offset, continueButton.top, continueButton.width, continueButton.height), "Continue", button)) {
+				drawBorder(new Rect(continueButton.left + offset, continueButton.top, continueButton.width, continueButton.height));
+				
+				deactivateEscMenu();
+			}
+			
+			//Return to menu button
+			if (GUI.Button(new Rect(returnToMenuButton.left + offset, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height), "Main  Menu", button)) {
+				drawBorder(new Rect(returnToMenuButton.left + offset, returnToMenuButton.top, returnToMenuButton.width, returnToMenuButton.height));
+				
+				greenWon = false;
+				returnToMenu();
+			}
+			
+			//Statistics
+			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
+			
+			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+
+		//In-game
+		} else {
+			if (showFPS) GUI.Label(new Rect(24 * screenRatio + offset, 24 * screenRatio, 400 * screenRatio, 80 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
+			
+			//Draw scores and lives
+			GUI.Label(new Rect(80 * screenRatio + offset, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + greenScore.ToString(), labelG);
+			GUI.Label(new Rect(80 * screenRatio + offset, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + greenLives.ToString(), labelG);
+			
+			GUI.Label(new Rect(screenWidth - 300 * screenRatio + offset, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + orangeScore.ToString(), labelO);
+			GUI.Label(new Rect(screenWidth - 300 * screenRatio + offset, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + orangeLives.ToString(), labelO);
+		}
+	}
+
+	private void drawNormalGUI() {
+		//Showing level selection menu
+		if (showing) {
+			//Green has won
+			if (greenWon) {
+				GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "G R E E N    W I N S!", boxG);
+				
+				//Return to menu button
+				if (GUI.Button(new Rect(screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio), "Main  Menu", button)) {
+					greenScore = 0;
+					orangeScore = 0;
+					greenWins = 0;
+					orangeWins = 0;
+					greenWon = false;
+					
+					showing = false;
+					Time.timeScale = 1;
+					Screen.showCursor = false;
+					instanceCount--;
+					Destroy(gameObject);
+					Application.LoadLevel(0);
+				}
+				
+			//Orange has won
+			} else if (orangeWon) {
+				GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "O R A N G E    W I N S!", boxO);
+				
+				//Return to menu button
+				if (GUI.Button(new Rect(screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio), "Main  Menu", button)) {
+					greenScore = 0;
+					orangeScore = 0;
+					greenWins = 0;
+					orangeWins = 0;
+					orangeWon = false;
+					
+					showing = false;
+					Time.timeScale = 1;
+					Screen.showCursor = false;
+					instanceCount--;
+					Destroy(gameObject);
+					Application.LoadLevel(1);
+				}
+				
+			//No winner yet
+			} else {
+				GUI.Box(new Rect(padding, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
+				
+				//Level selection buttons
+				GUI.Label(new Rect(screenWidth / 2 - 100 * screenRatio, screenHeight - 240 * screenRatio, width, 40 * screenRatio), "Choose next level:", label);
+				
+				if (GUI.Button(new Rect(screenWidth / 2 - (300 + 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level1, blank)) {
+					currentLevel = 2;
+					goToCurrentLevel();
+				}
+				
+				if (GUI.Button(new Rect(screenWidth / 2 - 112 * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level2, blank)) {
+					currentLevel = 3;
+					goToCurrentLevel();
+				}
+				
+				if (GUI.Button(new Rect(screenWidth / 2 + (300 - 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio), level3, blank)) {
+					currentLevel = 4;
+					goToCurrentLevel();
+				}
+			}
+			
+			//Statistics
+			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 210 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 210 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
+			
+			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			
+			//Green selections
+			GUI.Label(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  1", labelG);
+			greenLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2, 128 * screenRatio, 64 * screenRatio), greenLivesSelection, livesOptions, 1, checkboxL);
+			greenAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), greenAISelection, AIOptions, 1, checkboxL);
+			
+			//Orange selections
+			GUI.Label(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  2", labelO);
+			orangeLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 , 128 * screenRatio, 64 * screenRatio), orangeLivesSelection, livesOptions, 1, checkboxL);
+			orangeAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), orangeAISelection, AIOptions, 1, checkboxL);
+			
+		//Showing escape menu
+		} else if (escShowing) {
+			GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
+			
+			//Continue button
+			if (GUI.Button(continueButton, "Continue", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+				drawBorder(continueButton);
+				
+				if (seebrightTimer <= 0) {
+					seebrightTimer = waitTime;
+					deactivateEscMenu();
+				}
+			}
+			
+			//Return to menu button
+			if (GUI.Button(returnToMenuButton, "Main  Menu", button) || returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+				drawBorder(returnToMenuButton);
+				
+				if (seebrightTimer <= 0) {
+					seebrightTimer = waitTime;
+					greenWon = false;
+					returnToMenu();
+				}
+			}
+			
+			//Statistics
+			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
+			
+			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
+			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			
+		//In-game
+		} else {
+			if (showFPS) GUI.Label(new Rect(24 * screenRatio, 24 * screenRatio, 400 * screenRatio, 80 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
+			
+			//Draw scores and lives
+			GUI.Label(new Rect(80 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + greenScore.ToString(), labelG);
+			GUI.Label(new Rect(80 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + greenLives.ToString(), labelG);
+			
+			GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 120 * screenRatio, 200 * screenRatio, 40 * screenRatio), "S C O R E :     " + orangeScore.ToString(), labelO);
+			GUI.Label(new Rect(screenWidth - 300 * screenRatio, screenHeight - 80 * screenRatio, 200 * screenRatio, 40 * screenRatio), "LI V E S :      " + orangeLives.ToString(), labelO);
+		}
 	}
 }
