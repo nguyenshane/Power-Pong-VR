@@ -144,7 +144,7 @@ public class ScoreScreen : MonoBehaviour {
 			else deactivateEscMenu();
 		}
 
-		if (Mathf.Abs(Vector3.Dot(Input.gyro.gravity, Vector3.down) / Input.gyro.gravity) > 0.75 && !showing && !escShowing) {
+		if (Mathf.Abs(Vector3.Dot(Input.gyro.gravity, Vector3.down) / Input.gyro.gravity.magnitude) > 0.5f && !showing && !escShowing) {
 			activateEscMenu();
 		}
 				
