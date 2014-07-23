@@ -43,6 +43,7 @@ public class ScoreScreen : MonoBehaviour {
 	float screenRatio;
 	float seebrightTimer;
 	float cursorX, cursorY;
+	bool isActive;
 	Quaternion previousAttitude, currentAttitude;
 	Player leftPlayer, rightPlayer;
 	Rect returnToMenuButton, continueButton, AIOptionsBox, livesOptionsBox, level1Box, level2Box, level3Box;
@@ -159,8 +160,11 @@ public class ScoreScreen : MonoBehaviour {
 			if ((showing || escShowing) && seebrightEnabled) {
 				float gyroChange = Mathf.Abs(Quaternion.Angle(currentAttitude, previousAttitude));
 
-				//Reset timer if movement is too fast
-				if (gyroChange > waitDistance) seebrightTimer = waitTime;
+				bool prevActive = isActive;
+				if (checkActive() && !prevActive) GameObject.Find("PongSound").audio.Play();
+
+				//Reset timer if movement is too fast or the cursor isn't over something
+				if (gyroChange > waitDistance || !isActive) seebrightTimer = waitTime;
 				else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
 				
 				/*
@@ -175,6 +179,11 @@ public class ScoreScreen : MonoBehaviour {
 				Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
 				cursorX += offset.y * cursorSensitivity;
 				cursorY += -offset.x * cursorSensitivity;
+
+				if (gyroChange == 0 ) {
+					cursorX = Input.mousePosition.x;
+					cursorY = Input.mousePosition.y;
+				}
 				
 				//previousAttitude = currentAttitude;
 				
@@ -275,6 +284,71 @@ public class ScoreScreen : MonoBehaviour {
 		Application.LoadLevel(1);
 	}
 
+	//Checks if the cursor is over an element
+	private bool checkActive() {
+		isActive = false;
+
+		if (showing) {
+			if (greenWon || orangeWon) {
+				//Return to menu button
+				if (returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				}
+			} else {
+				//Level selection buttons
+				if (level1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				} else if (level2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				} else if (level3Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				}
+				
+				//Options
+				if (AIOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				} else if (AIOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				} else if (AIOptions2Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				}
+				
+				if (livesOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				} else if (livesOptions1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				}
+			}
+		} else if (escShowing) {
+			//Continue button
+			if (continueButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+				isActive = true;
+				return true;
+			}
+			
+			//Return to menu button
+			if (returnToMenuButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+				isActive = true;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private void drawBorder(Rect box) {
+		GUI.Label(box, "", border);
+	}
+
 	//Handles cursor interactions, draws border for selected object, and draws the cursor (should only be called once per GUI frame)
 	private void handleCursor() {
 		if (showing) {
@@ -288,7 +362,7 @@ public class ScoreScreen : MonoBehaviour {
 						seebrightTimer = waitTime;
 						greenWon = false;
 						returnToMenu();
-					}
+					} else isActive = true;
 				}
 			} else {
 				//Level selection buttons
@@ -397,10 +471,6 @@ public class ScoreScreen : MonoBehaviour {
 		//Draw cursor sprites
 		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2 + screenWidth, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
-	}
-
-	private void drawBorder(Rect box) {
-		GUI.Label(box, "", border);
 	}
 
 	//Draws the level selection menu on one side, does not handle the cursor
