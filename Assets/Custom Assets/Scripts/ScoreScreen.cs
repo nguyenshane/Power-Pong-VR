@@ -144,10 +144,10 @@ public class ScoreScreen : MonoBehaviour {
 			else deactivateEscMenu();
 		}
 
-		if (Mathf.Abs(currentAttitude.z - previousAttitude.z) > 60 && !showing && !escShowing) {
+		if (Mathf.Abs(Vector3.Dot(Input.gyro.gravity, Vector3.down) / Input.gyro.gravity) > 0.75 && !showing && !escShowing) {
 			activateEscMenu();
 		}
-		
+				
 		if (showing || escShowing) {
 			//Framerate dependent since timeScale = 0
 			if ((showing || escShowing) && seebrightEnabled) {
