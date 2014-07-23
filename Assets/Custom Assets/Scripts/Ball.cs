@@ -152,6 +152,7 @@ public class Ball : MonoBehaviour {
 				if (!neutral) score.GetComponent<Scores>().AddScore(points);
 				//otherScore.GetComponent<Scores>().AddScore(-1*points);
 				otherScore.GetComponent<Scores>().RemoveLife();
+
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
 					dropBall(dropLocation);
@@ -165,6 +166,7 @@ public class Ball : MonoBehaviour {
 			} else if (Collection.gameObject.name == "Green_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
 				//int points = (int)(score.GetComponent<Scores>().getScore () * goalPointPercentage);
 				//score.GetComponent<Scores>().AddScore(-1*points);
+				Handheld.Vibrate();
 				score.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
