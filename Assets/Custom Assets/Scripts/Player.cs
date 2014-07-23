@@ -30,7 +30,7 @@ public class Player : MonoBehaviour {
 	private Ball b1, b2;
 	private float reactionTimer;
 	private float centerDistance = 4.0f;
-	
+	private bool seebrightEnabled;
 	
 	void Start() {
 		b1 = ball1.GetComponent<Ball>();
@@ -210,7 +210,8 @@ public class Player : MonoBehaviour {
 			}
 		} else {
 			if (player == ePlayer.Left) {
-				inputSpeed = -Input.acceleration.x*(float)2;//Input.GetAxisRaw ("PlayerLeft");
+				if (seebrightEnabled) inputSpeed = -Input.acceleration.x * 2f;
+				else inputSpeed = Input.GetAxisRaw ("PlayerLeft");
 			} else if (player == ePlayer.Right) {
 				inputSpeed = Input.GetAxisRaw ("PlayerRight");
 			}
@@ -229,6 +230,8 @@ public class Player : MonoBehaviour {
 	}
 
 	public void updateOptions() {
+		seebrightEnabled = ScoreScreen.SeebrightEnabled;
+
 		if (player == ePlayer.Left) {
 			switch (ScoreScreen.greenAISelection) {
 			case 0:

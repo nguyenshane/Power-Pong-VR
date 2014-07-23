@@ -33,6 +33,7 @@ public class ScoreScreen : MonoBehaviour {
 	public int greenLives, orangeLives, greenScore, orangeScore, greenWins, orangeWins, greenTotalWins, orangeTotalWins;
 	public static int greenAISelection, orangeAISelection, greenLivesSelection, orangeLivesSelection;
 	public static int levelSelection, dummy;
+	public static bool SeebrightEnabled;
 	
 	static int instanceCount = 0;
 	
@@ -57,7 +58,9 @@ public class ScoreScreen : MonoBehaviour {
 			Destroy(gameObject);
 			return;
 		}
-		
+
+		SeebrightEnabled = seebrightEnabled;
+
 		leftPlayer = GameObject.Find ("Player Left").GetComponent<Player>();
 		rightPlayer = GameObject.Find ("Player Right").GetComponent<Player>();
 		
