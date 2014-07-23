@@ -17,6 +17,7 @@ public class ScoreScreen : MonoBehaviour {
 	private string[] livesOptions = new string[] {"3   Lives", "5   Lives"};
 	
 	public bool seebrightEnabled;
+	public bool useMouseForMenu;
 	public bool showFPS;
 	public int maxLevels;
 	
@@ -176,15 +177,15 @@ public class ScoreScreen : MonoBehaviour {
 				*/
 
 				//Cursor movement
-				Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
-				cursorX += offset.y * cursorSensitivity;
-				cursorY += -offset.x * cursorSensitivity;
-
-				if (gyroChange == 0 ) {
+				if (useMouseForMenu) {
 					cursorX = Input.mousePosition.x;
 					cursorY = Input.mousePosition.y;
+				} else {
+					Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
+					cursorX += offset.y * cursorSensitivity;
+					cursorY += -offset.x * cursorSensitivity;
 				}
-				
+
 				//previousAttitude = currentAttitude;
 				
 				if (cursorX < 0) cursorX = 0;
