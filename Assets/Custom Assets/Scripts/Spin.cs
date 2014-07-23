@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * Spins stationary obstacles
+ */
+
 public class Spin : MonoBehaviour {
 	public float speed = 10f;
+
 	// Use this for initialization
 	void Start () {
 	

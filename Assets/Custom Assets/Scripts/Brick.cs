@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * Handles powerup generation for normal bricks (in conjunction with PowerupController.cs)
+ */
+
 public class Brick : MonoBehaviour {
 
 	private float gen;

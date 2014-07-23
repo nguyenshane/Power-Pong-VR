@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* [Replaced by Ball.cs]
+ * Plays audio when bricks are broken
+ */
+
 public class Brick_Explode : MonoBehaviour {
 
 	// Use this for initialization
