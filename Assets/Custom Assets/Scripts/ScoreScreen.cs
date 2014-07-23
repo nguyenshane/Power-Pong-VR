@@ -71,6 +71,7 @@ public class ScoreScreen : MonoBehaviour {
 		
 		if (seebrightEnabled) {
 			screenWidth /= 2;
+			Screen.showCursor = false;
 		}
 		
 		//Initial cursor location in center of screen
@@ -254,7 +255,6 @@ public class ScoreScreen : MonoBehaviour {
 		} else Screen.showCursor = true;
 
 		levelSelection = -1;
-		Screen.showCursor = true;
 		Time.timeScale = 0;
 		showing = true;
 	}
