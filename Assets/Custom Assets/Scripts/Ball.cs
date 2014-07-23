@@ -179,9 +179,10 @@ public class Ball : MonoBehaviour {
 			} else if (Collection.gameObject.name == "Green_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
 				//int points = (int)(score.GetComponent<Scores>().getScore () * goalPointPercentage);
 				//score.GetComponent<Scores>().AddScore(-1*points);
-				Handheld.Vibrate();
 
+				Handheld.Vibrate();
 				GameObject.Find("ExplosionSound").audio.Play();
+
 				score.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
