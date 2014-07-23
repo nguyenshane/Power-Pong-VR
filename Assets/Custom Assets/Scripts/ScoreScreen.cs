@@ -362,7 +362,7 @@ public class ScoreScreen : MonoBehaviour {
 						seebrightTimer = waitTime;
 						greenWon = false;
 						returnToMenu();
-					} else isActive = true;
+					}
 				}
 			} else {
 				//Level selection buttons
