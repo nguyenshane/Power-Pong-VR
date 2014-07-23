@@ -112,6 +112,13 @@ public class Ball : MonoBehaviour {
 	void OnCollisionEnter(Collision Collection) {
 		currentSpeedBuffer = speedChangeBuffer; //Prevents the speed restrictions from causing wierd things when colliding
 
+		//SOUNDS
+		if(Collection.gameObject.name != "Brick" 
+		   && Collection.gameObject.name != "Orange_Goal"
+		   && Collection.gameObject.name != "Green_Goal"
+		   && Collection.gameObject.name != "Ground")
+		GameObject.Find("PongSound").audio.Play();
+
 		//GREEN PADDLE
 		if (ball == eBall.Left) {
 			//WITH ANY BRICK
@@ -122,13 +129,13 @@ public class Ball : MonoBehaviour {
 			} 
 			//WITH ORANGE GOAL BRICK
 			else if (Collection.gameObject.name == "Brick_O") {
-				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject.Find("KickSound").audio.Play();
 				Destroy(Collection.gameObject);
 				if (!neutral) score.GetComponent<Scores>().AddScore(goalBrickScore);
 			}
 			//WITH GREEN GOAL BRICK
 			else if (Collection.gameObject.name == "Brick_G") {
-				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject.Find("KickSound").audio.Play();
 				Destroy(Collection.gameObject);
 			} 
 			//WITH OWN PADDLE
@@ -156,6 +163,7 @@ public class Ball : MonoBehaviour {
 				int points = (int)(otherScore.GetComponent<Scores>().getScore () * goalPointPercentage);
 				if (!neutral) score.GetComponent<Scores>().AddScore(points);
 				//otherScore.GetComponent<Scores>().AddScore(-1*points);
+				GameObject.Find("ExplosionSound").audio.Play();
 				otherScore.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
@@ -170,6 +178,7 @@ public class Ball : MonoBehaviour {
 			} else if (Collection.gameObject.name == "Green_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
 				//int points = (int)(score.GetComponent<Scores>().getScore () * goalPointPercentage);
 				//score.GetComponent<Scores>().AddScore(-1*points);
+				GameObject.Find("ExplosionSound").audio.Play();
 				score.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
@@ -194,12 +203,12 @@ public class Ball : MonoBehaviour {
 				if (!neutral) score.GetComponent<Scores>().AddScore(normalBrickScore);
 			//Other goal bricks
 			} else if (Collection.gameObject.name == "Brick_G") {
-				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject.Find("KickSound").audio.Play();
 				Destroy(Collection.gameObject);
 				if (!neutral) score.GetComponent<Scores>().AddScore(goalBrickScore);
 			//Own goal bricks
 			} else if (Collection.gameObject.name == "Brick_O") {
-				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject.Find("KickSound").audio.Play();
 				Destroy(Collection.gameObject);
 			//Own paddle
 			} else if (Collection.gameObject.name == "Player Right") {
@@ -225,6 +234,7 @@ public class Ball : MonoBehaviour {
 				int points = (int)(otherScore.GetComponent<Scores>().getScore() * goalPointPercentage);
 				if (!neutral) score.GetComponent<Scores>().AddScore(points);
 				//otherScore.GetComponent<Scores>().AddScore(-1*points);
+				GameObject.Find("ExplosionSound").audio.Play();
 				otherScore.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives());
 				if (lives > 0) {
@@ -239,6 +249,7 @@ public class Ball : MonoBehaviour {
 			} else if (Collection.gameObject.name == "Orange_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
 				//int points = (int)(score.GetComponent<Scores>().getScore() * goalPointPercentage);
 				//score.GetComponent<Scores>().AddScore(-1*points);
+				GameObject.Find("ExplosionSound").audio.Play();
 				score.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
