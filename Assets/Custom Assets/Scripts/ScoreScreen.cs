@@ -137,16 +137,20 @@ public class ScoreScreen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		currentAttitude = Input.gyro.attitude;
+
 		if (Input.GetKeyUp(KeyCode.Escape) && !showing) {
 			if (!escShowing) activateEscMenu();
 			else deactivateEscMenu();
+		}
+
+		if (Mathf.Abs(currentAttitude.z - previousAttitude.z) > 60 && !showing && !escShowing) {
+			activateEscMenu();
 		}
 		
 		if (showing || escShowing) {
 			//Framerate dependent since timeScale = 0
 			if ((showing || escShowing) && seebrightEnabled) {
-				currentAttitude = Input.gyro.attitude;
-				
 				float gyroChange = Mathf.Abs(Quaternion.Angle(currentAttitude, previousAttitude));
 				
 				if (gyroChange > waitDistance) seebrightTimer = waitTime;
@@ -193,7 +197,7 @@ public class ScoreScreen : MonoBehaviour {
 						}
 					}
 					
-					//Orange has won
+				//Orange has won
 				} else if (orangeWon) {
 					GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "O R A N G E    W I N S!", boxO);
 					
@@ -206,7 +210,7 @@ public class ScoreScreen : MonoBehaviour {
 						}
 					}
 					
-					//No winner yet
+				//No winner yet
 				} else {
 					GUI.Box(new Rect(padding, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
 					
@@ -281,7 +285,7 @@ public class ScoreScreen : MonoBehaviour {
 				//Draw cursor
 				GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 				
-				//Non-Seebright GUI
+			//Non-Seebright GUI
 			} else {
 				//Green has won
 				if (greenWon) {
@@ -363,7 +367,8 @@ public class ScoreScreen : MonoBehaviour {
 				orangeLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 , 128 * screenRatio, 64 * screenRatio), orangeLivesSelection, livesOptions, 1, checkboxL);
 				orangeAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), orangeAISelection, AIOptions, 1, checkboxL);
 			}
-			//Showing escape menu
+
+		//Showing escape menu
 		} else if (escShowing) {
 			GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
 			
@@ -394,7 +399,7 @@ public class ScoreScreen : MonoBehaviour {
 			//Draw cursor
 			GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 			
-			//In-game
+		//In-game
 		} else {
 			if (showFPS) GUI.Label(new Rect(24 * screenRatio, 24 * screenRatio, 400 * screenRatio, 80 * screenRatio), "FPS: " + (1 / Time.deltaTime).ToString(), label);
 			
