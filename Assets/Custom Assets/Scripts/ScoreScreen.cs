@@ -250,8 +250,8 @@ public class ScoreScreen : MonoBehaviour {
 				GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
 				
 				//Options
-				orangeAISelection = GUI.SelectionGrid(AIOptionsBox, orangeAISelection, AIOptions, 1, checkboxL);
-				orangeLivesSelection = GUI.SelectionGrid(livesOptionsBox, orangeLivesSelection, livesOptions, 1, checkboxL);
+				orangeAISelection= GUI.SelectionGrid(AIOptionsBox, orangeAISelection, AIOptions, 1, checkboxL);
+				orangeLivesSelection = greenLivesSelection = GUI.SelectionGrid(livesOptionsBox, orangeLivesSelection, livesOptions, 1, checkboxL);
 				
 				if (AIOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
 					if (seebrightTimer <= 0) {
