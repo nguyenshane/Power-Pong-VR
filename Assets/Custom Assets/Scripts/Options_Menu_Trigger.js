@@ -146,17 +146,19 @@ function OnTriggerExit(other: Collider) {
 
 // functions of buttons
 function BGM(x){
-	if(x == "mute") bgmvolume = 0.0;
-	if(x == "minus" && bgmvolume >= 0.05) bgmvolume -= 0.05;
-	if(x == "plus" && bgmvolume <= 0.95) bgmvolume += 0.05;
+	var mid = GameObject.Find("BGM Line").transform.position.x;
+	if(x == "mute") {bgmvolume = 0.0; iTween.MoveTo(GameObject.Find("BGM Slider"),{"x":mid-5,"time":1});}
+	if(x == "minus" && bgmvolume >= 0.1) {bgmvolume -= 0.1; iTween.MoveTo(GameObject.Find("BGM Slider"),{"x":mid-5+bgmvolume*10,"time":1});}
+	if(x == "plus" && bgmvolume <= 0.9) {bgmvolume += 0.1; iTween.MoveTo(GameObject.Find("BGM Slider"),{"x":mid-5+bgmvolume*10,"time":1});}
 	audio.Play();
 	Debug.Log("BMG");
 }
 
 function SFX(x){
-	if(x == "mute") sfxvolume = 0.0;
-	if(x == "minus" && sfxvolume >= 0.05) sfxvolume -= 0.05;
-	if(x == "plus" && sfxvolume <= 0.95) sfxvolume += 0.05;
+	var mid = GameObject.Find("SFX Line").transform.position.x;
+	if(x == "mute") {sfxvolume = 0.0; iTween.MoveTo(GameObject.Find("SFX Slider"),{"x":mid-5,"time":1});}
+	if(x == "minus" && sfxvolume >= 0.1) {sfxvolume -= 0.1; iTween.MoveTo(GameObject.Find("SFX Slider"),{"x":mid-5+sfxvolume*10,"time":1});}
+	if(x == "plus" && sfxvolume <= 0.9) {sfxvolume += 0.1; iTween.MoveTo(GameObject.Find("SFX Slider"),{"x":mid-5+sfxvolume*10,"time":1});}
 	audio.Play();
 	Debug.Log("SFX");
 }
