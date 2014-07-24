@@ -4,7 +4,7 @@ using System.Collections;
 public class Splash_Screen: MonoBehaviour
 {
 	public float UpTimeSpeed = 1;
-	public float WaitingTime = 3;
+	public float WaitingTime = 5;
 	public float DownTimeSpeed = 1;
 	
 	private GUITexture splash;
