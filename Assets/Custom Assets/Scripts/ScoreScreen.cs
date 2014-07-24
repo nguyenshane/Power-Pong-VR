@@ -150,10 +150,12 @@ public class ScoreScreen : MonoBehaviour {
 			else deactivateEscMenu();
 		}
 
+		/*
 		//Activating menu by looking down (or up?)
 		if (Mathf.Abs(Vector3.Dot(Input.gyro.gravity, Vector3.down) / Input.gyro.gravity.magnitude) > 0.5f && !showing && !escShowing) {
 			activateEscMenu();
 		}
+		*/
 				
 		if (showing || escShowing) {
 			//Cursor
@@ -286,8 +288,8 @@ public class ScoreScreen : MonoBehaviour {
 			seebrightTimer = waitTime;
 		} else Screen.showCursor = true;
 
-		//Time.timeScale = 0;
-		//escShowing = true;
+		Time.timeScale = 0;
+		escShowing = true;
 	}
 	
 	private void deactivateEscMenu() {
