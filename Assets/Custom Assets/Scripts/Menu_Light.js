@@ -5,6 +5,10 @@ function Start () {
 	Input.gyro.enabled = true;
 	initialRotation = transform.rotation; 
 	gyroInitialRotation = Input.gyro.attitude;
+	
+	// control the title and menu animations
+	iTween.MoveTo(GameObject.Find("title"),{"y":6,"time":3});
+	iTween.MoveTo(GameObject.Find("Menu Buttons"),{"y":2.382,"time":3,"delay":1});
 }
 
 var speed : float = 3; //how fast the object should rotate
