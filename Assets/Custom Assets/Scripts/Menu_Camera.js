@@ -11,8 +11,8 @@ var delay:float;
 	
 function Update () {
 	// Audio volumes and cursor
-	audio.volume = GameObject.Find("Options Menu Trigger").GetComponent(Options_Menu_Trigger).bgmvolume;
-	AudioListener.volume = GameObject.Find("Options Menu Trigger").GetComponent(Options_Menu_Trigger).sfxvolume;
+	audio.volume = Options_Menu_Trigger.bgmvolume;
+	AudioListener.volume = Options_Menu_Trigger.sfxvolume;
 	Screen.showCursor = false;
 	
 	var angle : float = Mathf.MoveTowardsAngle

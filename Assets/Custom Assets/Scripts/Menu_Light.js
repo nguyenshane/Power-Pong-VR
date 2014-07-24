@@ -3,16 +3,21 @@
 function Start () {
 	//initAccY = Input.acceleration.y;
 	Input.gyro.enabled = true;
-	initialRotation = transform.rotation; 
-	gyroInitialRotation = Input.gyro.attitude;
+
 	
 	// control the title and menu animations
 	iTween.MoveTo(GameObject.Find("title"),{"y":6,"time":3});
-	iTween.MoveTo(GameObject.Find("Menu Buttons"),{"y":2.382,"time":3,"delay":1});
+	iTween.MoveTo(GameObject.Find("Menu Buttons"),{"y":2.382,"time":2.5,"delay":1,"oncomplete":"activatefn","oncompletetarget":gameObject});
 }
 
+function activatefn(){
+	initialRotation = transform.rotation; 
+	gyroInitialRotation = Input.gyro.attitude;
+	activate = true;
+	
+}
 var speed : float = 3; //how fast the object should rotate
-var activate = true;
+var activate = false;
 var initialRotation : UnityEngine.Quaternion;
 var gyroInitialRotation : UnityEngine.Quaternion;
 

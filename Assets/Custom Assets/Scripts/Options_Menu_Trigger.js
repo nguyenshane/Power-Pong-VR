@@ -164,8 +164,8 @@ function SFX(x){
 }
 
 function Brightness(x){
-	if(x == "minus" && brightness >= 0) brightness -= 0.5;
-	if(x == "plus" && brightness <= 1.0) brightness += 0.5;
+	if(x == "minus" && brightness >= 0.5) brightness -= 0.5;
+	if(x == "plus" && brightness <= 0.95) brightness += 0.5;
 	audio.Play();
 	Debug.Log("Brightness");
 }
