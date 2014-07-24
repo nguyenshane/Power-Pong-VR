@@ -12,7 +12,7 @@ public class ScoreScreen : MonoBehaviour {
 	private int width = 320;
 	private const float waitTime = 1.0f; //Click timer duration
 	private const float waitDistance = 600.0f; //Degrees per frame that the device must be rotated in order to reset the click timer (60 = 1 degree per second)
-	private const float cursorSensitivity = 5.0f; //Cursor movement speed multiplier
+	private const float cursorSensitivity = 12.0f; //Cursor movement speed multiplier
 	private string[] AIOptions = new string[] {"Easy", "Medium", "Hard"};
 	private string[] livesOptions = new string[] {"3   Lives", "5   Lives"};
 	
@@ -33,7 +33,6 @@ public class ScoreScreen : MonoBehaviour {
 	public int currentLevel;
 	public int greenLives, orangeLives, greenScore, orangeScore, greenWins, orangeWins, greenTotalWins, orangeTotalWins;
 	public static int greenAISelection, orangeAISelection, greenLivesSelection, orangeLivesSelection;
-	public static int levelSelection, dummy;
 	public static bool SeebrightEnabled;
 	
 	static int instanceCount = 0;
@@ -130,7 +129,6 @@ public class ScoreScreen : MonoBehaviour {
 		seebrightTimer = waitTime;
 		greenLives = orangeLives = greenScore = orangeScore = greenWins = orangeWins = greenTotalWins = orangeTotalWins = 0;
 		greenAISelection = orangeAISelection = greenLivesSelection = orangeLivesSelection = 0;
-		levelSelection = -1;
 		
 		//Green player is human (3)
 		greenAISelection = 3;
@@ -138,6 +136,7 @@ public class ScoreScreen : MonoBehaviour {
 		orangeAISelection = 2;
 		
 		showing = escShowing = false;
+		currentLevel = 2;
 		DontDestroyOnLoad(transform.gameObject); //Keeps the object persistent between levels, allows it to retain information although static variables might be able to do the same
 		activateBefore();
 	}
@@ -169,22 +168,32 @@ public class ScoreScreen : MonoBehaviour {
 				if (gyroChange > waitDistance || !isActive) seebrightTimer = waitTime;
 				else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
 				
-				/*
-				if (currentAttitude.x - previousAttitude.x < 0) cursorX += (currentAttitude.x - previousAttitude.x + 360f) * cursorSensitivity;
-				else cursorX += (currentAttitude.x - previousAttitude.x) * cursorSensitivity;
 
-				if (currentAttitude.y - previousAttitude.y < 0) cursorY += (currentAttitude.y - previousAttitude.y + 360f) * cursorSensitivity;
-				else cursorY += (currentAttitude.y - previousAttitude.y) * cursorSensitivity;
-				*/
 
 				//Cursor movement
 				if (useMouseForMenu) {
 					cursorX = Input.mousePosition.x;
 					cursorY = -Input.mousePosition.y + screenHeight;
 				} else {
+					/*
+					//Accelerometer
+					cursorX += Input.acceleration.x * cursorSensitivity;
+					cursorY += Input.acceleration.y * cursorSensitivity;
+					*/
+
+					//Working gyroscope
 					Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
 					cursorX += offset.y * cursorSensitivity;
 					cursorY += -offset.x * cursorSensitivity;
+
+					/*
+					//Not working gyroscope
+					if (currentAttitude.x - previousAttitude.x < 0) cursorX += (currentAttitude.x - previousAttitude.x + 360f) * cursorSensitivity;
+					else cursorX += (currentAttitude.x - previousAttitude.x) * cursorSensitivity;
+
+					if (currentAttitude.y - previousAttitude.y < 0) cursorY += (currentAttitude.y - previousAttitude.y + 360f) * cursorSensitivity;
+					else cursorY += (currentAttitude.y - previousAttitude.y) * cursorSensitivity;
+					*/
 				}
 
 				//previousAttitude = currentAttitude;
@@ -239,11 +248,11 @@ public class ScoreScreen : MonoBehaviour {
 		if (greenWins >= maxLevels / 2 + maxLevels % 2) {
 			//greenTotalWins++;
 			greenWon = true;
-			currentLevel = 1;
+			currentLevel = 2;
 		} else if (orangeWins >= maxLevels / 2 + maxLevels % 2) {
 			//orangeTotalWins++;
 			orangeWon = true;
-			currentLevel = 1;
+			currentLevel = 2;
 		} else {
 			currentLevel++;
 		}
@@ -254,7 +263,6 @@ public class ScoreScreen : MonoBehaviour {
 			seebrightTimer = waitTime;
 		} else Screen.showCursor = true;
 
-		levelSelection = -1;
 		Time.timeScale = 0;
 		showing = true;
 	}
@@ -267,7 +275,6 @@ public class ScoreScreen : MonoBehaviour {
 			seebrightTimer = waitTime;
 		} else Screen.showCursor = true;
 
-		levelSelection = -1;
 		Time.timeScale = 0;
 		showing = true;
 	}
@@ -380,6 +387,18 @@ public class ScoreScreen : MonoBehaviour {
 					}
 				}
 			} else {
+				//Continue button
+				if (continueButton.Contains(new Vector3(cursorX, cursorY, 0))) {
+					drawBorder(continueButton);
+					drawBorder(new Rect(continueButton.left + screenWidth, continueButton.top, continueButton.width, continueButton.height));
+					
+					if (seebrightTimer <= 0) {
+						seebrightTimer = waitTime;
+						goToCurrentLevel();
+					}
+				}
+
+				/*
 				//Level selection buttons
 				if (level1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
 					drawBorder(level1Box);
@@ -409,6 +428,7 @@ public class ScoreScreen : MonoBehaviour {
 						goToCurrentLevel();
 					}
 				}
+				*/
 
 				//Options
 				if (AIOptions0Box.Contains(new Vector3(cursorX, cursorY, 0))) {
@@ -519,6 +539,14 @@ public class ScoreScreen : MonoBehaviour {
 			} else {
 				GUI.Box(new Rect(padding + offset, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
 				
+				//Continue button
+				if (GUI.Button(new Rect(continueButton.left + offset, continueButton.top, continueButton.width, continueButton.height), "Continue", button)) {
+					drawBorder(new Rect(continueButton.left + offset, continueButton.top, continueButton.width, continueButton.height));
+					
+					goToCurrentLevel();
+				}
+
+				/*
 				//Level selection buttons
 				GUI.Label(new Rect(screenWidth / 2 - 160 * screenRatio + offset, screenHeight - 240 * screenRatio, width * 2, 60 * screenRatio), "Choose next level:", label);
 				
@@ -542,6 +570,7 @@ public class ScoreScreen : MonoBehaviour {
 					currentLevel = 4;
 					goToCurrentLevel();
 				}
+				*/
 			}
 			
 			//Statistics
