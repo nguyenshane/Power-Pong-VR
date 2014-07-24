@@ -21,8 +21,15 @@ public class PowerUp : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Vector3 vel = target.transform.position - transform.position;
+
+		if (target.transform.position.x > 0) {
+			if (vel.x < 0) return;
+		} else {
+			if (vel.x >= 0) return;
+		}
+
 		if (rigidbody.velocity.magnitude < minSpeed && target != null) {
-			Vector3 vel = target.transform.position - transform.position;
 			vel.z += Random.Range(-2.0f, 2.0f);
 			vel = vel / vel.magnitude * accelSpeed * Time.deltaTime;
 			rigidbody.AddForce (vel, ForceMode.Impulse);
