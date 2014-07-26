@@ -17,7 +17,7 @@ public class Player : MonoBehaviour {
 	public float inputSpeed = 0f;
 	public float maxSize = 16f;
 	public float minSize = 4f;
-	public float friction = 0.8f;
+	public float friction = 0.6f;
 	public GameObject ball1;
 	public GameObject ball2;
 	public ePlayer player;
@@ -210,8 +210,8 @@ public class Player : MonoBehaviour {
 			}
 		} else {
 			if (player == ePlayer.Left) {
-				if (seebrightEnabled) inputSpeed = -Input.acceleration.x * 2f;
-				else inputSpeed = Input.GetAxisRaw ("PlayerLeft");
+				inputSpeed = Input.GetAxisRaw ("PlayerLeft");
+				if (seebrightEnabled && inputSpeed == 0) inputSpeed = -Input.acceleration.x * 2f;
 			} else if (player == ePlayer.Right) {
 				inputSpeed = Input.GetAxisRaw ("PlayerRight");
 			}
