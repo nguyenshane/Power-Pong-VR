@@ -169,8 +169,6 @@ public class ScoreScreen : MonoBehaviour {
 				//Reset timer if movement is too fast or the cursor isn't over something
 				if (gyroChange > waitDistance || !isActive) seebrightTimer = waitTime;
 				else if (seebrightTimer > 0) seebrightTimer -= 1f / 60;
-				
-
 
 				//Cursor movement
 				if (useMouseForMenu) {
@@ -547,7 +545,7 @@ public class ScoreScreen : MonoBehaviour {
 				
 			//No winner yet
 			} else {
-				GUI.Box(new Rect(padding + offset, padding , screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
+				GUI.Box(new Rect(padding + offset, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
 				
 				//Continue button
 				if (GUI.Button(new Rect(continueButton.left + offset, continueButton.top, continueButton.width, continueButton.height), "Continue", button)) {
@@ -555,6 +553,10 @@ public class ScoreScreen : MonoBehaviour {
 					
 					goToCurrentLevel();
 				}
+
+				//Options
+				orangeAISelection = GUI.SelectionGrid(new Rect(AIOptionsBox.left + offset, AIOptionsBox.top, AIOptionsBox.width, AIOptionsBox.height), orangeAISelection, AIOptions, 1, checkboxL);
+				orangeLivesSelection = greenLivesSelection = GUI.SelectionGrid(new Rect(livesOptionsBox.left + offset, livesOptionsBox.top, livesOptionsBox.width, livesOptionsBox.height), orangeLivesSelection, livesOptions, 1, checkboxL);
 
 				/*
 				//Level selection buttons
@@ -589,11 +591,7 @@ public class ScoreScreen : MonoBehaviour {
 			
 			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), "Current    Wins: ", label);
 			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
-			
-			//Options
-			orangeAISelection = GUI.SelectionGrid(new Rect(AIOptionsBox.left + offset, AIOptionsBox.top, AIOptionsBox.width, AIOptionsBox.height), orangeAISelection, AIOptions, 1, checkboxL);
-			orangeLivesSelection = greenLivesSelection = GUI.SelectionGrid(new Rect(livesOptionsBox.left + offset, livesOptionsBox.top, livesOptionsBox.width, livesOptionsBox.height), orangeLivesSelection, livesOptions, 1, checkboxL);
-		
+					
 		//Showing escape menu
 		} else if (escShowing) {
 			GUI.Box(new Rect(padding + offset, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);
@@ -697,6 +695,16 @@ public class ScoreScreen : MonoBehaviour {
 					currentLevel = 4;
 					goToCurrentLevel();
 				}
+
+				//Green selections
+				GUI.Label(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  1", labelG);
+				greenLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2, 128 * screenRatio, 64 * screenRatio), greenLivesSelection, livesOptions, 1, checkboxL);
+				greenAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), greenAISelection, AIOptions, 1, checkboxL);
+				
+				//Orange selections
+				GUI.Label(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  2", labelO);
+				orangeLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 , 128 * screenRatio, 64 * screenRatio), orangeLivesSelection, livesOptions, 1, checkboxL);
+				orangeAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), orangeAISelection, AIOptions, 1, checkboxL);
 			}
 			
 			//Statistics
@@ -705,17 +713,7 @@ public class ScoreScreen : MonoBehaviour {
 			
 			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
 			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
-			
-			//Green selections
-			GUI.Label(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  1", labelG);
-			greenLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2, 128 * screenRatio, 64 * screenRatio), greenLivesSelection, livesOptions, 1, checkboxL);
-			greenAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), greenAISelection, AIOptions, 1, checkboxL);
-			
-			//Orange selections
-			GUI.Label(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 140 * screenRatio, 256 * screenRatio, 256 * screenRatio), "Player  2", labelO);
-			orangeLivesSelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 , 128 * screenRatio, 64 * screenRatio), orangeLivesSelection, livesOptions, 1, checkboxL);
-			orangeAISelection = GUI.SelectionGrid(new Rect(screenWidth / 4 * 3 - 60 * screenRatio, screenHeight / 2 - 100 * screenRatio, 128 * screenRatio, 128 * screenRatio), orangeAISelection, AIOptions, 1, checkboxL);
-			
+
 		//Showing escape menu
 		} else if (escShowing) {
 			GUI.Box(new Rect(padding, padding, screenWidth - padding*2, screenHeight - padding*2), "S  t a  t u  s", box);

@@ -15,6 +15,13 @@ public enum eBall
 
 public class Ball : MonoBehaviour {
 
+	private int normalBrickScore = 6;
+	private int goalBrickScore = 12;
+	private float leftImpulse = -4f;
+	private float rightImpulse = 4f;
+	private float goalPointPercentage = 0.20f;
+	private float speedChangeBuffer = 0.1f;
+
 	public GameObject score;
 	public GameObject otherScore;
 	public GameObject paddle;
@@ -28,18 +35,12 @@ public class Ball : MonoBehaviour {
 	public float minXSpeed;
 	public float initialDropDelay;
 	public eBall ball;
-	
-	float leftImpulse = -4f;
-	float rightImpulse = 4f;
+
 	Vector3 leftImpulse_F;
 	Vector3 rightImpulse_F;
-	int normalBrickScore = 6;
-	int goalBrickScore = 12;
-	float goalPointPercentage = 0.20f;
 	float currentDropDelay;
 	bool dontDrop = false;
 	bool neutral = false;
-	float speedChangeBuffer = 0.05f;
 	float currentSpeedBuffer;
 
 
@@ -58,6 +59,7 @@ public class Ball : MonoBehaviour {
 		currentSpeedBuffer = speedChangeBuffer;
 		currentDropDelay = initialDropDelay;
 	}
+
 
 	// Update is called once per frame
 	void Update () {
@@ -79,20 +81,9 @@ public class Ball : MonoBehaviour {
 					score.GetComponent<Scores>().increaseMultiplier();
 					rigidbody.AddForce (initialImpulse * score.GetComponent<Scores>().getMultiplier(), ForceMode.Impulse);
 				} else if (rigidbody.position.y == height) {
-					/*
 					if (currentSpeedBuffer > 0) {
 						currentSpeedBuffer -= Time.deltaTime;
-					} else {
-						if (Mathf.Abs(rigidbody.velocity.x) < minXSpeed) {
-							if (rigidbody.velocity.x != 0) {
-								rigidbody.AddForce (new Vector3(rigidbody.velocity.x * (minXSpeed / rigidbody.velocity.x - 1), 0f, 0f), ForceMode.Impulse);
-							} else {
-								if (transform.position.x > 0) rigidbody.AddForce (new Vector3(-minXSpeed, 0f, 0f), ForceMode.Impulse);
-								else rigidbody.AddForce (new Vector3(minXSpeed, 0f, 0f), ForceMode.Impulse);
-							}
-						}
 					}
-					*/
 
 					if (rigidbody.velocity.magnitude < minSpeed) {
 						if (rigidbody.velocity.magnitude != 0) {
@@ -110,8 +101,6 @@ public class Ball : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision Collection) {
-		currentSpeedBuffer = speedChangeBuffer; //Prevents the speed restrictions from causing wierd things when colliding
-
 		//SOUNDS
 		if(Collection.gameObject.name != "Brick" 
 		   && Collection.gameObject.name != "Orange_Goal"
@@ -140,34 +129,43 @@ public class Ball : MonoBehaviour {
 			} 
 			//WITH OWN PADDLE
 			else if (Collection.gameObject.name == "Player Left") {
-				Player player = Collection.gameObject.GetComponent<Player>();
-				if (!neutral) score.GetComponent<Scores>().AddScore(normalBrickScore/2);
-				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
-				    player.transform.localPosition.x < transform.localPosition.x) {
-					transform.position = new Vector3(player.transform.position.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, transform.position.y, transform.position.z);
-					rigidbody.AddForce(new Vector3(rightImpulse, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
-						                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);
+				if (currentSpeedBuffer <= 0) {
+					Player player = Collection.gameObject.GetComponent<Player>();
+					Vector3 playerpos = player.transform.position;
+					Vector3 ballpos = transform.position;
+
+					if (!neutral) score.GetComponent<Scores>().AddScore(normalBrickScore/2);
+					if (playerpos.z + player.transform.localScale.z / 2 > ballpos.z &&
+					    playerpos.z - player.transform.localScale.z / 2 < ballpos.z &&
+					    playerpos.x < ballpos.x) {
+						transform.position = new Vector3(playerpos.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, ballpos.y, ballpos.z);
+						rigidbody.AddForce(new Vector3(rightImpulse, 0, player.friction * (Mathf.Abs(ballpos.z - playerpos.z) / (player.transform.localScale.z / 2)) *
+						                               player.inputSpeed * player.speed), ForceMode.Impulse);
+					}
 				}
 			}
 			//WITH OTHER PADDLE
 			else if (Collection.gameObject.name == "Player Right") {
+				if (currentSpeedBuffer <= 0) {
 				Player player = Collection.gameObject.GetComponent<Player>();
-				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
-				    player.transform.localPosition.x > transform.localPosition.x) {
-					transform.position = new Vector3(player.transform.position.x - player.transform.localScale.x / 2 - transform.localScale.x / 2, transform.position.y, transform.position.z);
-					rigidbody.AddForce(new Vector3(0, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
-					                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);
+				Vector3 playerpos = player.transform.position;
+				Vector3 ballpos = transform.position;
+
+				if (playerpos.z + player.transform.localScale.z / 2 > ballpos.z &&
+				    playerpos.z - player.transform.localScale.z / 2 < ballpos.z &&
+				    playerpos.x > ballpos.x) {
+					transform.position = new Vector3(playerpos.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, ballpos.y, ballpos.z);
+					rigidbody.AddForce(new Vector3(0, 0, player.friction * (Mathf.Abs(ballpos.z - playerpos.z) / (player.transform.localScale.z / 2)) *
+					                               player.inputSpeed * player.speed), ForceMode.Impulse);
 				}
+			}
 			//Other goal
 			} else if (Collection.gameObject.name == "Orange_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
+				GameObject.Find("ExplosionSound").audio.Play();
+
 				int points = (int)(otherScore.GetComponent<Scores>().getScore () * goalPointPercentage);
 				if (!neutral) score.GetComponent<Scores>().AddScore(points);
-				//otherScore.GetComponent<Scores>().AddScore(-1*points);
-				GameObject.Find("ExplosionSound").audio.Play();
 				otherScore.GetComponent<Scores>().RemoveLife();
-
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
 					dropBall(dropLocation);
@@ -179,9 +177,6 @@ public class Ball : MonoBehaviour {
 				}
 			//Own goal
 			} else if (Collection.gameObject.name == "Green_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
-				//int points = (int)(score.GetComponent<Scores>().getScore () * goalPointPercentage);
-				//score.GetComponent<Scores>().AddScore(-1*points);
-
 				Handheld.Vibrate();
 				GameObject.Find("ExplosionSound").audio.Play();
 
@@ -218,31 +213,41 @@ public class Ball : MonoBehaviour {
 				Destroy(Collection.gameObject);
 			//Own paddle
 			} else if (Collection.gameObject.name == "Player Right") {
-				Player player = Collection.gameObject.GetComponent<Player>();
-				if (!neutral) score.GetComponent<Scores>().AddScore(normalBrickScore/2);
-				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
-				    player.transform.localPosition.x > transform.localPosition.x) {
-					transform.position = new Vector3(player.transform.position.x - player.transform.localScale.x / 2 - transform.localScale.x / 2, transform.position.y, transform.position.z);
-					rigidbody.AddForce(new Vector3(leftImpulse, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
-					                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);
+				if (currentSpeedBuffer <= 0) {
+					Player player = Collection.gameObject.GetComponent<Player>();
+					Vector3 playerpos = player.transform.position;
+					Vector3 ballpos = transform.position;
+					
+					if (!neutral) score.GetComponent<Scores>().AddScore(normalBrickScore/2);
+					if (playerpos.z + player.transform.localScale.z / 2 > ballpos.z &&
+					    playerpos.z - player.transform.localScale.z / 2 < ballpos.z &&
+					    playerpos.x > ballpos.x) {
+						transform.position = new Vector3(playerpos.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, ballpos.y, ballpos.z);
+						rigidbody.AddForce(new Vector3(leftImpulse, 0, player.friction * (Mathf.Abs(ballpos.z - playerpos.z) / (player.transform.localScale.z / 2)) *
+						                               player.inputSpeed * player.speed), ForceMode.Impulse);
+					}
 				}
 			//Other paddle
 			} else if (Collection.gameObject.name == "Player Left") {
-				Player player = Collection.gameObject.GetComponent<Player>();
-				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
-				    player.transform.localPosition.x < transform.localPosition.x) {
-					transform.position = new Vector3(player.transform.position.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, transform.position.y, transform.position.z);
-					rigidbody.AddForce(new Vector3(0, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
-					                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);
+				if (currentSpeedBuffer <= 0) {
+					Player player = Collection.gameObject.GetComponent<Player>();
+					Vector3 playerpos = player.transform.position;
+					Vector3 ballpos = transform.position;
+					
+					if (playerpos.z + player.transform.localScale.z / 2 > ballpos.z &&
+					    playerpos.z - player.transform.localScale.z / 2 < ballpos.z &&
+					    playerpos.x < ballpos.x) {
+						transform.position = new Vector3(playerpos.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, ballpos.y, ballpos.z);
+						rigidbody.AddForce(new Vector3(0, 0, player.friction * (Mathf.Abs(ballpos.z - playerpos.z) / (player.transform.localScale.z / 2)) *
+						                               player.inputSpeed * player.speed), ForceMode.Impulse);
+					}
 				}
 			//Other goal
 			} else if (Collection.gameObject.name == "Green_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
+				GameObject.Find("ExplosionSound").audio.Play();
+
 				int points = (int)(otherScore.GetComponent<Scores>().getScore() * goalPointPercentage);
 				if (!neutral) score.GetComponent<Scores>().AddScore(points);
-				//otherScore.GetComponent<Scores>().AddScore(-1*points);
-				GameObject.Find("ExplosionSound").audio.Play();
 				otherScore.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives());
 				if (lives > 0) {
@@ -255,9 +260,8 @@ public class Ball : MonoBehaviour {
 				}
 			//Own goal
 			} else if (Collection.gameObject.name == "Orange_Goal" && ball != eBall.F_Left && ball != eBall.F_Right) {
-				//int points = (int)(score.GetComponent<Scores>().getScore() * goalPointPercentage);
-				//score.GetComponent<Scores>().AddScore(-1*points);
 				GameObject.Find("ExplosionSound").audio.Play();
+
 				score.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {
@@ -298,6 +302,8 @@ public class Ball : MonoBehaviour {
 				Destroy(gameObject);
 			}
 		}
+
+		currentSpeedBuffer = speedChangeBuffer; //Prevents the speed restrictions from causing wierd things when colliding
 	}
 
 	void dropBall(Vector3 location) {
