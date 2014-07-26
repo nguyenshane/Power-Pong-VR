@@ -164,6 +164,8 @@ public class Ball : MonoBehaviour {
 				if (!neutral) score.GetComponent<Scores>().AddScore(points);
 				//otherScore.GetComponent<Scores>().AddScore(-1*points);
 				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject camera = GameObject.Find("SBCamera");
+				camera.GetComponent<CameraShake>().shakeNow = true;
 				otherScore.GetComponent<Scores>().RemoveLife();
 
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
@@ -182,6 +184,8 @@ public class Ball : MonoBehaviour {
 
 				Handheld.Vibrate();
 				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject camera = GameObject.Find("SBCamera");
+				camera.GetComponent<CameraShake>().shakeNow = true;
 
 				score.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
@@ -239,6 +243,8 @@ public class Ball : MonoBehaviour {
 				if (!neutral) score.GetComponent<Scores>().AddScore(points);
 				//otherScore.GetComponent<Scores>().AddScore(-1*points);
 				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject camera = GameObject.Find("SBCamera");
+				camera.GetComponent<CameraShake>().shakeNow = true;
 				otherScore.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives());
 				if (lives > 0) {
@@ -254,6 +260,8 @@ public class Ball : MonoBehaviour {
 				//int points = (int)(score.GetComponent<Scores>().getScore() * goalPointPercentage);
 				//score.GetComponent<Scores>().AddScore(-1*points);
 				GameObject.Find("ExplosionSound").audio.Play();
+				GameObject camera = GameObject.Find("SBCamera");
+				camera.GetComponent<CameraShake>().shakeNow = true;
 				score.GetComponent<Scores>().RemoveLife();
 				int lives = (int)(score.GetComponent<Scores>().getLives ());
 				if (lives > 0) {

@@ -1,5 +1,5 @@
 ﻿#pragma strict
-
+// This script controls the lights and volumes for each level
 function Start () {
 	GameObject.Find("Point light").light.intensity *= Options_Menu_Trigger.brightness;
 	GameObject.Find("Player point light").light.intensity *= Options_Menu_Trigger.brightness;
@@ -11,7 +11,7 @@ function Start () {
 }
 
 function Update () {
-
+	
 }
 
 function First_Drop(){
