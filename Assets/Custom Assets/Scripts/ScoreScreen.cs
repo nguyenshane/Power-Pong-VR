@@ -320,6 +320,7 @@ public class ScoreScreen : MonoBehaviour {
 					return true;
 				}
 			} else {
+				/*
 				//Level selection buttons
 				if (level1Box.Contains(new Vector3(cursorX, cursorY, 0))) {
 					isActive = true;
@@ -328,6 +329,13 @@ public class ScoreScreen : MonoBehaviour {
 					isActive = true;
 					return true;
 				} else if (level3Box.Contains(new Vector3(cursorX, cursorY, 0))) {
+					isActive = true;
+					return true;
+				}
+				*/
+
+				//Continue button
+				if (continueButton.Contains(new Vector3(cursorX, cursorY, 0))) {
 					isActive = true;
 					return true;
 				}
@@ -506,8 +514,8 @@ public class ScoreScreen : MonoBehaviour {
 		}
 		
 		//Draw cursor sprites
-		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
-		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2 + screenWidth, cursorY - cursor.fixedHeight / 2, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
+		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2.75f, cursorY - cursor.fixedHeight / 4.5f, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
+		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2.75f + screenWidth, cursorY - cursor.fixedHeight / 4.5f, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 	}
 
 	//Draws the level selection menu on one side, does not handle the cursor

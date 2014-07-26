@@ -143,7 +143,8 @@ public class Ball : MonoBehaviour {
 				Player player = Collection.gameObject.GetComponent<Player>();
 				if (!neutral) score.GetComponent<Scores>().AddScore(normalBrickScore/2);
 				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z) {
+				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
+				    player.transform.localPosition.x < transform.localPosition.x) {
 					transform.position = new Vector3(player.transform.position.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, transform.position.y, transform.position.z);
 					rigidbody.AddForce(new Vector3(rightImpulse, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
 						                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);
@@ -153,7 +154,8 @@ public class Ball : MonoBehaviour {
 			else if (Collection.gameObject.name == "Player Right") {
 				Player player = Collection.gameObject.GetComponent<Player>();
 				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z) {
+				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
+				    player.transform.localPosition.x > transform.localPosition.x) {
 					transform.position = new Vector3(player.transform.position.x - player.transform.localScale.x / 2 - transform.localScale.x / 2, transform.position.y, transform.position.z);
 					rigidbody.AddForce(new Vector3(0, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
 					                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);
@@ -219,7 +221,8 @@ public class Ball : MonoBehaviour {
 				Player player = Collection.gameObject.GetComponent<Player>();
 				if (!neutral) score.GetComponent<Scores>().AddScore(normalBrickScore/2);
 				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z) {
+				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
+				    player.transform.localPosition.x > transform.localPosition.x) {
 					transform.position = new Vector3(player.transform.position.x - player.transform.localScale.x / 2 - transform.localScale.x / 2, transform.position.y, transform.position.z);
 					rigidbody.AddForce(new Vector3(leftImpulse, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
 					                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);
@@ -228,7 +231,8 @@ public class Ball : MonoBehaviour {
 			} else if (Collection.gameObject.name == "Player Left") {
 				Player player = Collection.gameObject.GetComponent<Player>();
 				if (player.transform.localPosition.z + player.transform.localScale.z / 2 > transform.localPosition.z &&
-				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z) {
+				    player.transform.localPosition.z - player.transform.localScale.z / 2 < transform.localPosition.z &&
+				    player.transform.localPosition.x < transform.localPosition.x) {
 					transform.position = new Vector3(player.transform.position.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, transform.position.y, transform.position.z);
 					rigidbody.AddForce(new Vector3(0, 0, Collection.gameObject.GetComponent<Player>().friction * (Mathf.Abs(transform.localPosition.z - player.transform.localPosition.z) / (player.transform.localScale.z / 2)) * Collection.gameObject.GetComponent<Player>().inputSpeed * 
 					                               Collection.gameObject.GetComponent<Player>().speed), ForceMode.Impulse);

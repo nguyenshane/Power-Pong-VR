@@ -210,8 +210,8 @@ public class Player : MonoBehaviour {
 			}
 		} else {
 			if (player == ePlayer.Left) {
-				if (seebrightEnabled) inputSpeed = -Input.acceleration.x * 2f;
-				else inputSpeed = Input.GetAxisRaw ("PlayerLeft");
+				inputSpeed = Input.GetAxisRaw ("PlayerLeft");
+				if (seebrightEnabled && inputSpeed == 0) inputSpeed = -Input.acceleration.x * 2f;
 			} else if (player == ePlayer.Right) {
 				inputSpeed = Input.GetAxisRaw ("PlayerRight");
 			}
