@@ -108,7 +108,7 @@ public class Ball : MonoBehaviour {
 		   && Collection.gameObject.name != "Ground")
 		GameObject.Find("PongSound").audio.Play();
 
-		//GREEN PADDLE
+		//GREEN BALL
 		if (ball == eBall.Left) {
 			//WITH ANY BRICK
 			if(Collection.gameObject.name == "Brick") {
@@ -154,7 +154,7 @@ public class Ball : MonoBehaviour {
 				if (playerpos.z + player.transform.localScale.z / 2 > ballpos.z &&
 				    playerpos.z - player.transform.localScale.z / 2 < ballpos.z &&
 				    playerpos.x > ballpos.x) {
-					transform.position = new Vector3(playerpos.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, ballpos.y, ballpos.z);
+					transform.position = new Vector3(playerpos.x - player.transform.localScale.x / 2 - transform.localScale.x / 2, ballpos.y, ballpos.z);
 					rigidbody.AddForce(new Vector3(0, 0, player.friction * (Mathf.Abs(ballpos.z - playerpos.z) / (player.transform.localScale.z / 2)) *
 					                               player.inputSpeed * player.speed), ForceMode.Impulse);
 				}
@@ -197,6 +197,8 @@ public class Ball : MonoBehaviour {
 					else rigidbody.AddForce(new Vector3(-minXSpeed, 0, 0), ForceMode.Impulse);
 				}
 			}
+
+		//Orange ball
 		} else if (ball == eBall.Right) {
 			if(Collection.gameObject.name == "Brick") {
 				audio.Play();
@@ -222,7 +224,7 @@ public class Ball : MonoBehaviour {
 					if (playerpos.z + player.transform.localScale.z / 2 > ballpos.z &&
 					    playerpos.z - player.transform.localScale.z / 2 < ballpos.z &&
 					    playerpos.x > ballpos.x) {
-						transform.position = new Vector3(playerpos.x + player.transform.localScale.x / 2 + transform.localScale.x / 2, ballpos.y, ballpos.z);
+						transform.position = new Vector3(playerpos.x - player.transform.localScale.x / 2 - transform.localScale.x / 2, ballpos.y, ballpos.z);
 						rigidbody.AddForce(new Vector3(leftImpulse, 0, player.friction * (Mathf.Abs(ballpos.z - playerpos.z) / (player.transform.localScale.z / 2)) *
 						                               player.inputSpeed * player.speed), ForceMode.Impulse);
 					}

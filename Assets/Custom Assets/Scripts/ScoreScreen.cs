@@ -9,7 +9,7 @@ using System.Collections;
 public class ScoreScreen : MonoBehaviour {
 	
 	private int padding = 0;
-	private int width = 320;
+	private int width = 440;
 	private const float waitTime = 1.0f; //Click timer duration
 	private const float waitDistance = 600.0f; //Degrees per frame that the device must be rotated in order to reset the click timer (60 = 1 degree per second)
 	private const float cursorSensitivity = 12.0f; //Cursor movement speed multiplier
@@ -28,7 +28,7 @@ public class ScoreScreen : MonoBehaviour {
 	public GUIStyle checkboxL, checkboxR;
 	public GUIStyle cursor;
 	public GUIStyle border;
-	public Texture level1, level2, level3;
+	public Texture level1, level2, level3, victory;
 	
 	public int currentLevel;
 	public int greenLives, orangeLives, greenScore, orangeScore, greenWins, orangeWins, greenTotalWins, orangeTotalWins;
@@ -46,8 +46,9 @@ public class ScoreScreen : MonoBehaviour {
 	bool isActive;
 	Quaternion previousAttitude, currentAttitude;
 	Player leftPlayer, rightPlayer;
-	Rect returnToMenuButton, continueButton, AIOptionsBox, livesOptionsBox, level1Box, level2Box, level3Box;
+	Rect returnToMenuButton, continueButton, AIOptionsBox, livesOptionsBox, level1Box, level2Box, level3Box, victoryBox;
 	Rect AIOptions0Box, AIOptions1Box, AIOptions2Box, livesOptions0Box, livesOptions1Box;
+	Color greenColor, orangeColor;
 	
 	// Use this for initialization
 	void Start () {
@@ -64,6 +65,9 @@ public class ScoreScreen : MonoBehaviour {
 
 		leftPlayer = GameObject.Find ("Player Left").GetComponent<Player>();
 		rightPlayer = GameObject.Find ("Player Right").GetComponent<Player>();
+
+		greenColor = GameObject.Find ("Player Left").renderer.material.GetColor("_Color");
+		orangeColor = GameObject.Find ("Player Right").renderer.material.GetColor("_Color");
 		
 		screenWidth = Screen.width;
 		screenHeight = Screen.height;
@@ -110,8 +114,8 @@ public class ScoreScreen : MonoBehaviour {
 		cursor.fixedWidth = (int)(cursor.fixedWidth * screenRatio);
 		
 		//Bounding boxes for interactable UI elements
-		returnToMenuButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio);
-		continueButton = new Rect (screenWidth / 2 - 100 * screenRatio, screenHeight - 200 * screenRatio, 240 * screenRatio, 60 * screenRatio);
+		returnToMenuButton = new Rect (screenWidth / 2 - 120 * screenRatio, screenHeight - 120 * screenRatio, 240 * screenRatio, 60 * screenRatio);
+		continueButton = new Rect (screenWidth / 2 - 120 * screenRatio, screenHeight - 200 * screenRatio, 240 * screenRatio, 60 * screenRatio);
 		
 		AIOptionsBox = new Rect (screenWidth / 2 - 70 * screenRatio, screenHeight / 2 - 40 * screenRatio, 180 * screenRatio, (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 3);
 		AIOptions0Box = new Rect (screenWidth / 2 - 70 * screenRatio - 2, screenHeight / 2 - (40 * screenRatio - (checkboxL.fixedHeight + checkboxL.margin.top / 2 + checkboxL.margin.bottom / 2) * 0) - 1, 180 * screenRatio + 4, checkboxL.fixedHeight + 4);
@@ -125,6 +129,7 @@ public class ScoreScreen : MonoBehaviour {
 		level1Box = new Rect (screenWidth / 2 - (300 + 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio);
 		level2Box = new Rect (screenWidth / 2 - 112 * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio);
 		level3Box = new Rect (screenWidth / 2 + (300 - 112) * screenRatio, screenHeight - 200 * screenRatio, 224 * screenRatio, 128 * screenRatio);
+		victoryBox = new Rect (screenWidth / 2 - 192 * screenRatio, screenHeight / 2 - 92 * screenRatio, 384 * screenRatio, 384 * screenRatio);
 		
 		seebrightTimer = waitTime;
 		greenLives = orangeLives = greenScore = orangeScore = greenWins = orangeWins = greenTotalWins = orangeTotalWins = 0;
@@ -516,6 +521,14 @@ public class ScoreScreen : MonoBehaviour {
 		GUI.Label(new Rect(cursorX - cursor.fixedWidth / 2.75f + screenWidth, cursorY - cursor.fixedHeight / 4.5f, cursor.fixedWidth, cursor.fixedHeight), "", cursor);
 	}
 
+	private void drawStatistics(int offset) {
+		GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 320 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
+		GUI.Label(new Rect(screenWidth / 2 + width / 3 + offset, screenHeight / 2 - 320 * screenRatio, width / 1.5f, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
+		
+		GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
+		GUI.Label(new Rect(screenWidth / 2 + width / 3 + offset, screenHeight / 2 - 200 * screenRatio, width / 1.5f, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+	}
+
 	//Draws the level selection menu on one side, does not handle the cursor
 	private void drawSeebrightGUI(int offset) {
 		if (showing) {
@@ -530,6 +543,11 @@ public class ScoreScreen : MonoBehaviour {
 					greenWon = false;
 					returnToMenu();
 				}
+
+				//Green victory icon
+				GUI.contentColor = greenColor;
+				GUI.Label(new Rect(victoryBox.left + offset, victoryBox.top, victoryBox.width, victoryBox.height), victory, blank);
+				GUI.contentColor = Color.white;
 				
 			//Orange has won
 			} else if (orangeWon) {
@@ -542,6 +560,11 @@ public class ScoreScreen : MonoBehaviour {
 					orangeWon = false;
 					returnToMenu();
 				}
+
+				//Orange victory icon
+				GUI.contentColor = orangeColor;
+				GUI.Label(new Rect(victoryBox.left + offset, victoryBox.top, victoryBox.width, victoryBox.height), victory, blank);
+				GUI.contentColor = Color.white;
 				
 			//No winner yet
 			} else {
@@ -586,11 +609,7 @@ public class ScoreScreen : MonoBehaviour {
 			}
 			
 			//Statistics
-			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 280 * screenRatio, width, 60 * screenRatio), "Match    Scores: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 280 * screenRatio, width, 60 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-			
-			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), "Current    Wins: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 60 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			drawStatistics(offset);
 					
 		//Showing escape menu
 		} else if (escShowing) {
@@ -612,11 +631,7 @@ public class ScoreScreen : MonoBehaviour {
 			}
 			
 			//Statistics
-			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-			
-			GUI.Label(new Rect(screenWidth / 2 - width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2 + offset, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			drawStatistics(offset);
 
 		//In-game
 		} else {
@@ -708,11 +723,7 @@ public class ScoreScreen : MonoBehaviour {
 			}
 			
 			//Statistics
-			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 210 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 210 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-			
-			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 180 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			drawStatistics(0);
 
 		//Showing escape menu
 		} else if (escShowing) {
@@ -740,11 +751,7 @@ public class ScoreScreen : MonoBehaviour {
 			}
 			
 			//Statistics
-			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), "Match    Scores: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 240 * screenRatio, width, 40 * screenRatio), greenScore.ToString() + " : " + orangeScore.ToString(), label);
-			
-			GUI.Label(new Rect(screenWidth / 2 - width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), "Current    Wins: ", label);
-			GUI.Label(new Rect(screenWidth / 2 + width / 2, screenHeight / 2 - 200 * screenRatio, width, 40 * screenRatio), greenWins.ToString() + " : " + orangeWins.ToString(), label);
+			drawStatistics(0);
 			
 		//In-game
 		} else {
