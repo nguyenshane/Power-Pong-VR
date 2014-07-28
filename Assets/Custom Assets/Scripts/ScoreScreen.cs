@@ -12,7 +12,7 @@ public class ScoreScreen : MonoBehaviour {
 	private int width = 440;
 	private const float waitTime = 1.0f; //Click timer duration
 	private const float waitDistance = 600.0f; //Degrees per frame that the device must be rotated in order to reset the click timer (60 = 1 degree per second)
-	private const float cursorSensitivity = 12.0f; //Cursor movement speed multiplier
+	private const float cursorSensitivity = 600.0f; //Cursor movement speed multiplier
 	private string[] AIOptions = new string[] {"Easy", "Medium", "Hard"};
 	private string[] livesOptions = new string[] {"3   Lives", "5   Lives"};
 	
@@ -198,7 +198,7 @@ public class ScoreScreen : MonoBehaviour {
 
 					//Better working gyroscope
 					Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
-					cursorX = originalCursorX + (offset.y * cursorSensitivity);
+					//cursorX = originalCursorX + (offset.y * cursorSensitivity);
 					cursorY = originalCursorY + (-offset.x * cursorSensitivity);
 
 					/*
