@@ -42,7 +42,7 @@ public class ScoreScreen : MonoBehaviour {
 	bool greenWon = false, orangeWon = false;
 	float screenRatio;
 	float seebrightTimer;
-	float cursorX, cursorY;
+	float cursorX, cursorY, originalCursorX, originalCursorY;
 	bool isActive;
 	Quaternion previousAttitude, currentAttitude;
 	Player leftPlayer, rightPlayer;
@@ -78,8 +78,11 @@ public class ScoreScreen : MonoBehaviour {
 		}
 		
 		//Initial cursor location in center of screen
-		cursorX = screenWidth / 2;
-		cursorY = screenHeight / 5 * 2;
+		originalCursorX = screenWidth / 2;
+		originalCursorY = screenHeight / 5 * 2;
+
+		cursorX = originalCursorX;
+		cursorY = originalCursorY;
 		
 		//Initial gyroscope orientation
 		Input.gyro.enabled = true;
@@ -186,10 +189,17 @@ public class ScoreScreen : MonoBehaviour {
 					cursorY += Input.acceleration.y * cursorSensitivity;
 					*/
 
+					/*
 					//Working gyroscope
 					Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
 					cursorX += offset.y * cursorSensitivity;
 					cursorY += -offset.x * cursorSensitivity;
+					*/
+
+					//Better working gyroscope
+					Quaternion offset = Quaternion.Inverse(previousAttitude) * currentAttitude;
+					cursorX = originalCursorX + (offset.y * cursorSensitivity);
+					cursorY = originalCursorY + (-offset.x * cursorSensitivity);
 
 					/*
 					//Not working gyroscope
