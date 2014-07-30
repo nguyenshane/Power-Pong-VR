@@ -4,22 +4,22 @@ function Start () {
 	//initAccY = Input.acceleration.y;
 	Input.gyro.enabled = true;
 
-	
+
 	// control the title and menu animations
 	iTween.MoveTo(GameObject.Find("title"),{"y":6,"time":3});
 	iTween.MoveTo(GameObject.Find("Menu Buttons"),{"y":2.382,"time":2.5,"delay":1,"oncomplete":"activatefn","oncompletetarget":gameObject});
-	
-	
-	initialRotation = transform.rotation; 
-	gyroInitialRotation = Input.gyro.attitude;
-	activate = true;
+
+
+	//initialRotation = transform.rotation; 
+	//gyroInitialRotation = Input.gyro.attitude;
+	//activate = true;
 }
 
 function activatefn(){
 	initialRotation = transform.rotation; 
 	gyroInitialRotation = Input.gyro.attitude;
 	activate = true;
-	
+
 }
 var speed : float = 3; //how fast the object should rotate
 var activate = false;
@@ -36,7 +36,7 @@ Input.gyro.enabled = true;
  	  var correctRotation : UnityEngine.Quaternion = initialRotation * offsetRotation;
  	  
       transform.position.y += (offsetRotation.x)*speed;
-      //transform.position.y += Input.GetAxis("Mouse Y");
+      transform.position.y += Input.GetAxis("Mouse Y");
       
       var y = transform.position.y;
       if(y<-6.486) transform.position.y = -6.486;
