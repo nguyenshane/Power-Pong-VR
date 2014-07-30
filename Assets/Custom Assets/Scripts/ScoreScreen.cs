@@ -280,6 +280,8 @@ public class ScoreScreen : MonoBehaviour {
 
 		Time.timeScale = 0;
 		showing = true;
+		GameObject camera = GameObject.Find("SBCamera");
+		camera.GetComponent<CameraShake> ().notStopped = false;
 	}
 	
 	//Activates score screen but doesn't do the automatic level transition (no effect since the player now selects them manually) and doesn't determine a winner
@@ -292,6 +294,8 @@ public class ScoreScreen : MonoBehaviour {
 
 		Time.timeScale = 0;
 		showing = true;
+		GameObject camera = GameObject.Find("SBCamera");
+		camera.GetComponent<CameraShake> ().notStopped = false;
 	}
 	
 	public void activateEscMenu() {
@@ -303,6 +307,8 @@ public class ScoreScreen : MonoBehaviour {
 
 		Time.timeScale = 0;
 		escShowing = true;
+		GameObject camera = GameObject.Find("SBCamera");
+		camera.GetComponent<CameraShake> ().notStopped = false;
 	}
 	
 	private void deactivateEscMenu() {
